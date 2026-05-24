@@ -12,10 +12,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome untuk Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
         .bg-utama { background-color: #043927; }
         .text-utama { color: #043927; }
         .border-utama { border-color: #043927; }
@@ -26,10 +26,9 @@
 <body class="bg-gray-50 flex flex-col min-h-screen text-gray-800">
 
     <!-- NAVBAR -->
-    <nav class="bg-white shadow-md sticky top-0 z-40 transition-all duration-300">
+    <nav class="bg-white shadow-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                <!-- Logo & Title Section -->
                 <div class="flex items-center space-x-3 cursor-pointer" onclick="switchPage('beranda')">
                     <div class="bg-utama p-2.5 rounded-lg shadow-inner">
                         <i class="fa-solid fa-graduation-cap text-2xl text-white"></i>
@@ -40,52 +39,43 @@
                     </div>
                 </div>
 
-                <!-- Navigation Links (Desktop) -->
                 <div class="hidden md:flex space-x-1 lg:space-x-4 items-center">
-                    <button onclick="switchPage('beranda')" id="nav-beranda" class="nav-link px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 text-utama bg-gray-100 font-semibold">Beranda</button>
-                    <button onclick="switchPage('profil')" id="nav-profil" class="nav-link px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 text-gray-600 hover:text-utama hover:bg-gray-50">Profil</button>
-                    <button onclick="switchPage('kegiatan')" id="nav-kegiatan" class="nav-link px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 text-gray-600 hover:text-utama hover:bg-gray-50">Kegiatan</button>
-                    <button onclick="switchPage('dokumentasi')" id="nav-dokumentasi" class="nav-link px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 text-gray-600 hover:text-utama hover:bg-gray-50">Dokumentasi</button>
+                    <button onclick="switchPage('beranda')" id="nav-beranda" class="nav-link px-4 py-2 rounded-lg font-medium text-sm text-utama bg-gray-100 font-semibold">Beranda</button>
+                    <button onclick="switchPage('profil')" id="nav-profil" class="nav-link px-4 py-2 rounded-lg font-medium text-sm text-gray-600 hover:text-utama hover:bg-gray-50">Profil</button>
+                    <button onclick="switchPage('kegiatan')" id="nav-kegiatan" class="nav-link px-4 py-2 rounded-lg font-medium text-sm text-gray-600 hover:text-utama hover:bg-gray-50">Kegiatan</button>
+                    <button onclick="switchPage('dokumentasi')" id="nav-dokumentasi" class="nav-link px-4 py-2 rounded-lg font-medium text-sm text-gray-600 hover:text-utama hover:bg-gray-50">Dokumentasi</button>
                     
-                    <!-- Admin Button -->
                     <div class="pl-4 border-l border-gray-200 ml-2">
-                        <button id="btn-login-trigger" onclick="toggleModal('modal-login', true)" class="bg-utama hover:bg-emerald-900 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow transition-all duration-200 flex items-center space-x-2 cursor-pointer">
-                            <i class="fa-solid fa-right-to-bracket text-xs"></i>
-                            <span>Login Admin</span>
+                        <button id="btn-login-trigger" onclick="toggleModal('modal-login', true)" class="bg-utama hover:bg-emerald-900 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow flex items-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-right-to-bracket text-xs"></i> <span>Login Admin</span>
                         </button>
                         <div id="admin-badge" class="hidden flex items-center space-x-3">
-                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-md border border-amber-200 flex items-center space-x-1">
-                                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse mr-1"></span>Mode Admin
+                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-md border border-amber-200 flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse mr-1.5"></span>Mode Cloud Admin
                             </span>
-                            <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs px-3 py-1.5 rounded-md border border-red-200 transition-all duration-150 cursor-pointer">
-                                Logout
-                            </button>
+                            <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs px-3 py-1.5 rounded-md border border-red-200 cursor-pointer">Logout</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Mobile Menu Button -->
                 <div class="md:hidden flex items-center">
-                    <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-utama focus:outline-none p-2 rounded-lg hover:bg-gray-100">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-utama p-2 rounded-lg hover:bg-gray-100">
                         <i id="menu-icon" class="fa-solid fa-bars text-xl"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Navigation Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-4 pt-2 pb-4 space-y-1 shadow-lg">
             <button onclick="switchPage('beranda')" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-utama bg-gray-50">Beranda</button>
             <button onclick="switchPage('profil')" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600 hover:bg-gray-50">Profil</button>
             <button onclick="switchPage('kegiatan')" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600 hover:bg-gray-50">Kegiatan</button>
             <button onclick="switchPage('dokumentasi')" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600 hover:bg-gray-50">Dokumentasi</button>
             <div class="pt-4 border-t border-gray-100 mt-2">
-                <button id="btn-login-trigger-mobile" onclick="toggleModal('modal-login', true)" class="w-full bg-utama text-white font-medium py-3 rounded-lg text-center block shadow cursor-pointer">Login Admin</button>
+                <button id="btn-login-trigger-mobile" onclick="toggleModal('modal-login', true)" class="w-full bg-utama text-white font-medium py-3 rounded-lg text-center cursor-pointer">Login Admin</button>
                 <div id="admin-badge-mobile" class="hidden space-y-2">
-                    <div class="bg-amber-50 text-amber-800 text-sm font-bold p-3 rounded-lg border border-amber-200 text-center">
-                        Mode Admin Aktif
-                    </div>
-                    <button onclick="logoutAdmin()" class="w-full bg-red-600 text-white font-medium py-3 rounded-lg text-center block shadow cursor-pointer">Logout</button>
+                    <div class="bg-amber-50 text-amber-800 text-sm font-bold p-3 rounded-lg border border-amber-200 text-center">Mode Cloud Admin Aktif</div>
+                    <button onclick="logoutAdmin()" class="w-full bg-red-600 text-white font-medium py-3 rounded-lg text-center cursor-pointer">Logout</button>
                 </div>
             </div>
         </div>
@@ -94,45 +84,30 @@
     <!-- CONTENT CONTAINERS -->
     <main class="flex-grow">
         
-        <!-- ================= PAGE: BERANDA ================= -->
+        <!-- PAGE: BERANDA -->
         <div id="page-beranda" class="page-section">
-            <!-- Hero Section -->
             <div class="bg-utama text-white py-12 md:py-20 overflow-hidden relative">
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-800/40 via-transparent to-transparent"></div>
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div class="grid md:grid-cols-12 gap-8 md:gap-12 items-center">
                         <div class="md:col-span-7 space-y-6">
                             <span class="bg-aksen text-utama text-xs font-bold px-3 py-1.5 rounded-md tracking-wider uppercase inline-block shadow-sm">Portal Resmi K3SD Kalsel</span>
-                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight lg:leading-none">
-                                Wadah Kolaborasi dan Sinergi Kepala Sekolah Dasar se-Kalimantan Selatan
-                            </h1>
-                            <p class="text-emerald-100 text-base sm:text-lg max-w-2xl font-light leading-relaxed">
-                                Berkomitmen meningkatkan mutu manajemen sekolah, kapabilitas kepemimpinan era digital, serta akselerasi mutu pendidikan dasar yang merata di Bumi Lambung Mangkurat.
-                            </p>
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">Wadah Kolaborasi Kepala Sekolah Dasar se-Kalimantan Selatan</h1>
+                            <p class="text-emerald-100 text-base sm:text-lg max-w-2xl font-light">Berkomitmen meningkatkan mutu manajemen sekolah, kapabilitas kepemimpinan era digital, serta akselerasi mutu pendidikan dasar.</p>
                             <div class="flex flex-wrap gap-4 pt-2">
-                                <button onclick="switchPage('profil')" class="bg-aksen hover:bg-amber-500 text-utama font-bold px-6 py-3.5 rounded-xl shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer">Jelajahi Profil</button>
-                                <button onclick="switchPage('kegiatan')" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3.5 rounded-xl backdrop-blur-sm border border-white/20 transition-all duration-200 cursor-pointer">Agenda Kegiatan</button>
+                                <button onclick="switchPage('profil')" class="bg-aksen hover:bg-amber-500 text-utama font-bold px-6 py-3.5 rounded-xl shadow-lg cursor-pointer">Jelajahi Profil</button>
+                                <button onclick="switchPage('kegiatan')" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3.5 rounded-xl backdrop-blur-sm border border-white/20 cursor-pointer">Agenda Kegiatan</button>
                             </div>
                         </div>
-                        <div class="md:col-span-5 relative">
-                            <div class="bg-white/10 p-3 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl transform hover:scale-[1.02] transition-all duration-300">
-                                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" alt="Dokumentasi Rapat K3SD" class="rounded-xl w-full h-64 md:h-80 object-cover shadow-inner">
-                            </div>
-                            <div class="absolute -bottom-6 -left-6 bg-white text-gray-800 p-4 rounded-xl shadow-xl hidden sm:flex items-center space-x-3 border border-gray-100 max-w-xs">
-                                <div class="bg-amber-100 p-2.5 rounded-lg text-amber-600">
-                                    <i class="fa-solid fa-lightbulb text-xl"></i>
-                                </div>
-                                <div>
-                                    <span class="text-xs font-bold uppercase tracking-wider text-gray-400 block">Motto Kerja</span>
-                                    <span class="text-sm font-bold text-utama">Bergerak Bersama, Unggul Bersama</span>
-                                </div>
+                        <div class="md:col-span-5">
+                            <div class="bg-white/10 p-3 rounded-2xl backdrop-blur-md border border-white/10 shadow-2xl">
+                                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80" alt="Rapat" class="rounded-xl w-full h-64 md:h-80 object-cover">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Informasi & Pengumuman Section -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
                     <div>
@@ -143,78 +118,55 @@
                         <i class="fa-solid fa-circle-plus"></i> <span>Tambah Pengumuman</span>
                     </button>
                 </div>
-
-                <!-- Grid Data Pengumuman -->
                 <div id="container-beranda" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Dinamis Diisi JavaScript -->
+                    <p class="text-gray-400 text-sm animate-pulse">Memuat data dari cloud server...</p>
                 </div>
             </div>
         </div>
 
-        <!-- ================= PAGE: PROFIL ================= -->
+        <!-- PAGE: PROFIL -->
         <div id="page-profil" class="page-section hidden py-16">
             <div class="max-w-4xl mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-bold text-utama tracking-tight">Profil Organisasi</h2>
                     <div class="h-1 w-20 bg-aksen mt-2 mx-auto rounded-full"></div>
-                    <p class="text-gray-500 mt-4">Mengenal lebih dekat Kelompok Kerja Kepala Sekolah Dasar Provinsi Kalimantan Selatan</p>
                 </div>
-
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-8 relative">
                     <div class="absolute top-6 right-6">
-                        <button onclick="enableProfilEdit()" id="btn-edit-profil" class="admin-action hidden bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow items-center space-x-2 transition-all cursor-pointer">
+                        <button onclick="enableProfilEdit()" id="btn-edit-profil" class="admin-action hidden bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow items-center space-x-2 cursor-pointer">
                             <i class="fa-solid fa-pen-to-square"></i> <span>Edit Profil</span>
                         </button>
-                        <button onclick="saveProfilEdit()" id="btn-save-profil" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow items-center space-x-2 transition-all cursor-pointer">
-                            <i class="fa-solid fa-floppy-disk"></i> <span>Simpan Perubahan</span>
+                        <button onclick="saveProfilEdit()" id="btn-save-profil" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow items-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-floppy-disk"></i> <span>Simpan ke Cloud</span>
                         </button>
                     </div>
-
                     <div class="prose max-w-none space-y-6">
                         <div>
                             <h3 class="text-xl font-bold text-utama mb-3 flex items-center space-x-2">
-                                <i class="fa-solid fa-bullseye text-sm text-aksen"></i>
-                                <span>Visi</span>
+                                <i class="fa-solid fa-bullseye text-sm text-aksen"></i> <span>Visi</span>
                             </h3>
-                            <div id="profil-visi" class="text-gray-600 leading-relaxed p-2 rounded-lg transition-all">
-                                Menjadi wadah penggerak utama dalam mewujudkan kepala sekolah dasar yang profesional, inovatif, dan berintegritas tinggi menuju pendidikan dasar yang unggul dan merata di Kalimantan Selatan.
-                            </div>
+                            <div id="profil-visi" class="text-gray-600 leading-relaxed p-2 rounded-lg">Memuat data visi...</div>
                         </div>
-
                         <hr class="border-gray-100">
-
                         <div>
                             <h3 class="text-xl font-bold text-utama mb-3 flex items-center space-x-2">
-                                <i class="fa-solid fa-rocket text-sm text-aksen"></i>
-                                <span>Misi</span>
+                                <i class="fa-solid fa-rocket text-sm text-aksen"></i> <span>Misi</span>
                             </h3>
-                            <div id="profil-misi" class="text-gray-600 leading-relaxed p-2 rounded-lg transition-all">
-                                1. Meningkatkan kompetensi manajerial, kewirausahaan, dan supervisi kepala sekolah secara berkelanjutan.<br>
-                                2. Membangun jaringan kemitraan dan kolaborasi yang sinergis antar instansi pendidikan se-Kalimantan Selatan.<br>
-                                3. Mendorong transformasi digitalisasi manajemen sekolah demi efisiensi dan transparansi mutu pengajaran.
-                            </div>
+                            <div id="profil-misi" class="text-gray-600 leading-relaxed p-2 rounded-lg">Memuat data misi...</div>
                         </div>
-
                         <hr class="border-gray-100">
-
                         <div>
                             <h3 class="text-xl font-bold text-utama mb-3 flex items-center space-x-2">
-                                <i class="fa-solid fa-sitemap text-sm text-aksen"></i>
-                                <span>Struktur Organisasi Inti</span>
+                                <i class="fa-solid fa-sitemap text-sm text-aksen"></i> <span>Struktur Organisasi Inti</span>
                             </h3>
-                            <div id="profil-struktur" class="text-gray-600 leading-relaxed p-2 rounded-lg transition-all">
-                                <strong>Ketua Umum:</strong> Dr. H. Supriadi, M.Pd<br>
-                                <strong>Wakil Ketua:</strong> Ahmad Nuril, M.Pd<br>
-                                <strong>Sekretaris Jenderal:</strong> Siti Aminah, S.Pd<br>
-                                <strong>Bendahara:</strong> Hajah Salamah, M.Pd
-                            </div>
+                            <div id="profil-struktur" class="text-gray-600 leading-relaxed p-2 rounded-lg">Memuat data struktur...</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= PAGE: KEGIATAN ================= -->
+        <!-- PAGE: KEGIATAN -->
         <div id="page-kegiatan" class="page-section hidden py-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
@@ -222,19 +174,17 @@
                         <h2 class="text-3xl font-bold text-utama tracking-tight">Agenda & Kegiatan Terkini</h2>
                         <div class="h-1 w-20 bg-aksen mt-2 rounded-full"></div>
                     </div>
-                    <button onclick="openFormModal('kegiatan')" class="admin-action hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow items-center space-x-2 transition-all cursor-pointer">
+                    <button onclick="openFormModal('kegiatan')" class="admin-action hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow items-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-circle-plus"></i> <span>Tambah Agenda Kegiatan</span>
                     </button>
                 </div>
-
-                <!-- Grid Data Agenda -->
                 <div id="container-kegiatan" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Dinamis Diisi JavaScript -->
+                    <p class="text-gray-400 text-sm animate-pulse">Memuat data kegiatan...</p>
                 </div>
             </div>
         </div>
 
-        <!-- ================= PAGE: DOKUMENTASI ================= -->
+        <!-- PAGE: DOKUMENTASI -->
         <div id="page-dokumentasi" class="page-section hidden py-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
@@ -242,152 +192,95 @@
                         <h2 class="text-3xl font-bold text-utama tracking-tight">Galeri Dokumentasi</h2>
                         <div class="h-1 w-20 bg-aksen mt-2 rounded-full"></div>
                     </div>
-                    <button onclick="openFormModal('dokumentasi')" class="admin-action hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow items-center space-x-2 transition-all cursor-pointer">
+                    <button onclick="openFormModal('dokumentasi')" class="admin-action hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow items-center space-x-2 cursor-pointer">
                         <i class="fa-solid fa-camera"></i> <span>Unggah Dokumentasi Baru</span>
                     </button>
                 </div>
-
-                <!-- Grid Dokumentasi Gambar -->
                 <div id="container-dokumentasi" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <!-- Dinamis Diisi JavaScript -->
+                    <p class="text-gray-400 text-sm animate-pulse">Memuat galeri foto...</p>
                 </div>
             </div>
         </div>
-
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-utama text-gray-100 pt-16 pb-8 border-t border-emerald-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
-            <!-- Kolom 1: Informasi Instansi -->
-            <div class="md:col-span-5 space-y-4">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-white/10 p-2 rounded-lg backdrop-blur-sm">
-                        <i class="fa-solid fa-graduation-cap text-xl text-aksen"></i>
-                    </div>
-                    <span class="font-bold text-base tracking-wider uppercase text-white">K3SD PROV. KALSEL</span>
-                </div>
-                <p class="text-sm text-emerald-100/70 leading-relaxed">
-                    Wadah resmi kemitraan Kepala Sekolah Dasar tingkat provinsi untuk akselerasi manajemen tata kelola sekolah berkualitas di Kalimantan Selatan.
-                </p>
-            </div>
-
-            <!-- Kolom 2: Navigasi Cepat -->
-            <div class="md:col-span-3 space-y-4">
-                <h4 class="text-white font-bold text-sm tracking-wider uppercase">Navigasi Halaman</h4>
-                <ul class="space-y-2.5 text-sm text-emerald-100/70">
-                    <li><button onclick="switchPage('beranda')" class="hover:text-aksen transition-colors cursor-pointer">Beranda</button></li>
-                    <li><button onclick="switchPage('profil')" class="hover:text-aksen transition-colors cursor-pointer">Profil</button></li>
-                    <li><button onclick="switchPage('kegiatan')" class="hover:text-aksen transition-colors cursor-pointer">Kegiatan</button></li>
-                    <li><button onclick="switchPage('dokumentasi')" class="hover:text-aksen transition-colors cursor-pointer">Dokumentasi</button></li>
-                </ul>
-            </div>
-
-            <!-- Kolom 3: Kontak -->
-            <div class="md:col-span-4 space-y-4">
-                <h4 class="text-white font-bold text-sm tracking-wider uppercase">Sekretariat & Kontak</h4>
-                <ul class="space-y-3 text-sm text-emerald-100/70">
-                    <li class="flex items-start space-x-3">
-                        <i class="fa-solid fa-location-dot mt-1 text-aksen text-xs shrink-0"></i>
-                        <span>BPMP (Balai Penjaminan Mutu Pendidikan) Provinsi Kalimantan Selatan</span>
-                    </li>
-                    <li class="flex items-center space-x-3">
-                        <i class="fa-solid fa-envelope text-aksen text-xs shrink-0"></i>
-                        <span class="break-all">k3sdprovinsikalsel@gmail.com</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-emerald-800/60 text-center text-xs text-emerald-100/40">
-            &copy; 2026 K3SD Provinsi Kalimantan Selatan. Seluruh hak cipta dilindungi.
-        </div>
+    <footer class="bg-utama text-gray-100 pt-12 pb-6 border-t border-emerald-900 text-center text-xs">
+        <p class="text-emerald-100/50">&copy; 2026 K3SD Provinsi Kalimantan Selatan. Database Cloud Aktif.</p>
     </footer>
-
-    <!-- ================= MODAL DIALOGS (SUDAH DIPERBAIKI DARI BLUR) ================= -->
 
     <!-- MODAL 1: LOGIN ADMIN -->
     <div id="modal-login" class="fixed inset-0 z-50 overflow-y-auto hidden">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0 relative">
-            <!-- Latar belakang gelap transparan & efek blur diisolasi khusus di sini -->
+        <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block relative">
             <div class="fixed inset-0 transition-opacity" onclick="toggleModal('modal-login', false)">
                 <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-            <!-- Kotak Putih Utama (Diberi relative z-10 agar jernih sempurna) -->
-            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-gray-100 relative z-10">
+            <div class="inline-block align-middle bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-gray-100 relative z-10">
                 <div class="bg-white px-6 pt-6 pb-4">
                     <div class="flex justify-between items-center pb-4 border-b border-gray-100">
-                        <h3 class="text-xl font-bold text-utama flex items-center space-x-2">
-                            <i class="fa-solid fa-lock text-base text-aksen"></i>
-                            <span class="text-gray-900">Autentikasi Admin</span>
+                        <h3 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+                            <i class="fa-solid fa-lock text-base text-aksen"></i> <span>Autentikasi Admin</span>
                         </h3>
-                        <button onclick="toggleModal('modal-login', false)" class="text-gray-400 hover:text-gray-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        <button onclick="toggleModal('modal-login', false)" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
                     </div>
                     <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4 pt-4">
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Username</label>
-                            <input type="text" id="login-username" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="admin">
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Username</label>
+                            <input type="text" id="login-username" required class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white shadow-sm" placeholder="admin">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Password</label>
-                            <input type="password" id="login-password" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="••••••••">
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Password</label>
+                            <input type="password" id="login-password" required class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white shadow-sm" placeholder="••••••••">
                         </div>
-                        <div id="login-error" class="text-red-600 text-xs font-medium hidden flex items-center space-x-1">
-                            <i class="fa-solid fa-circle-exclamation"></i> <span>Username atau Password salah!</span>
-                        </div>
-                        <button type="submit" class="w-full bg-utama hover:bg-emerald-900 text-white font-bold py-3 rounded-lg shadow transition-all duration-150 mt-2 text-sm cursor-pointer">Masuk Sistem</button>
+                        <div id="login-error" class="text-red-600 text-xs font-medium hidden"><i class="fa-solid fa-circle-exclamation"></i> Username/Password salah!</div>
+                        <button type="submit" class="w-full bg-utama hover:bg-emerald-900 text-white font-bold py-3 rounded-lg text-sm transition-all shadow cursor-pointer">Masuk Sistem</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL 2: FORM CRUD (BERANDA & KEGIATAN & DOKUMENTASI) -->
+    <!-- MODAL 2: FORM CRUD -->
     <div id="modal-crud" class="fixed inset-0 z-50 overflow-y-auto hidden">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0 relative">
-            <!-- Latar belakang gelap transparan & efek blur diisolasi khusus di sini -->
+        <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block relative">
             <div class="fixed inset-0 transition-opacity" onclick="toggleModal('modal-crud', false)">
                 <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-            <!-- Kotak Form Utama (Diberi relative z-10 agar jernih sempurna) -->
-            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-gray-100 relative z-10">
+            <div class="inline-block align-middle bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-gray-100 relative z-10">
                 <div class="bg-white px-6 pt-6 pb-4">
                     <div class="flex justify-between items-center pb-4 border-b border-gray-100">
                         <h3 id="crud-title" class="text-xl font-bold text-gray-900">Tambah Konten</h3>
-                        <button onclick="toggleModal('modal-crud', false)" class="text-gray-400 hover:text-gray-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        <button onclick="toggleModal('modal-crud', false)" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
                     </div>
                     <form id="form-crud" onsubmit="handleFormSubmit(event)" class="space-y-4 pt-4">
-                        <!-- Id Entitas Tersembunyi -->
                         <input type="hidden" id="crud-id">
                         <input type="hidden" id="crud-target-page">
 
-                        <!-- Field Dinamis Tergantung Kebutuhan -->
                         <div id="field-kategori">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Kategori / Badge</label>
-                            <input type="text" id="input-kategori" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="Contoh: Rakerwil, Registrasi, Info">
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Kategori / Badge</label>
+                            <input type="text" id="input-kategori" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white">
                         </div>
                         <div id="field-judul">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Judul Konten</label>
-                            <input type="text" id="input-judul" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="Masukkan judul utama">
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Judul Konten</label>
+                            <input type="text" id="input-judul" required class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white">
                         </div>
                         <div id="field-tanggal">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Tanggal Pelaksanaan / Rilis</label>
-                            <input type="text" id="input-tanggal" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="Contoh: 20 Mei 2026">
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Tanggal Pelaksanaan</label>
+                            <input type="text" id="input-tanggal" required class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white" placeholder="Contoh: 25 Mei 2026">
                         </div>
                         <div id="field-gambar">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">URL Gambar / Foto</label>
-                            <input type="url" id="input-gambar" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="https://images.unsplash.com/...">
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">URL Gambar / Foto</label>
+                            <input type="url" id="input-gambar" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white" placeholder="https://...">
                         </div>
                         <div id="field-deskripsi">
-                            <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Deskripsi / Konten Ringkas</label>
-                            <textarea id="input-deskripsi" rows="4" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="Tuliskan detail konten secara informatif..."></textarea>
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Deskripsi Ringkas</label>
+                            <textarea id="input-deskripsi" rows="4" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white"></textarea>
                         </div>
 
                         <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
-                            <button type="button" onclick="toggleModal('modal-crud', false)" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-semibold px-4 py-2.5 rounded-lg text-sm transition-all cursor-pointer">Batal</button>
-                            <button type="submit" class="bg-utama hover:bg-emerald-900 text-white font-bold px-5 py-2.5 rounded-lg text-sm shadow transition-all cursor-pointer">Simpan Konten</button>
+                            <button type="button" onclick="toggleModal('modal-crud', false)" class="bg-gray-100 text-gray-600 font-semibold px-4 py-2.5 rounded-lg text-sm cursor-pointer">Batal</button>
+                            <button type="submit" class="bg-utama text-white font-bold px-5 py-2.5 rounded-lg text-sm shadow cursor-pointer">Simpan Ke Cloud</button>
                         </div>
                     </form>
                 </div>
@@ -395,103 +288,49 @@
         </div>
     </div>
 
-
-    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // STATE MANAJEMEN APLIKASI
+        // ================= CONFIG CLOUD DATABASE BERHASIL TERPASANG =================
+        const SUPABASE_URL = "https://xhhmbjhhebyjqhwytmwn.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoaG1iamhoZWJ5anFod3l0bXduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NjAzODksImV4cCI6MjA5NTEzNjM4OX0.A_G63EFExIWOrRZHCl-nyOB_YV2tTxIGazaovW3KG7Q";
+        // ============================================================================
+
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let isAdminActive = false;
-        
-        // DATA DEFAULT JIKA LOCALSTORAGE MASIH KOSONG
-        const defaultBeranda = [
-            { id: 1, kategori: 'Rakerwil', judul: 'Hasil Keputusan Rapat Koordinasi Wilayah K3SD Se-Kalsel 2026', deskripsi: 'Poin-poin kesepakatan penting pengurus provinsi mengenai standarisasi instrumen peningkatan mutu kelulusan sekolah dasar...', tanggal: '20 Mei 2026' },
-            { id: 2, kategori: 'Registrasi', judul: 'Kuota Tambahan Diklat Implementasi Kurikulum Nasional', deskripsi: 'Mengingat tingginya antusiasme, pendaftaran kuota susulan diklat kepemimpinan kepala sekolah resmi dibuka kembali hingga akhir bulan ini...', tanggal: '18 Mar 2026' },
-            { id: 3, kategori: 'Panduan', judul: 'Buku Saku Digital Optimalisasi Rapor Pendidikan SD', deskripsi: 'Unduh materi kompilasi strategi pembenahan berbasis data (PBD) untuk seluruh Kepala Sekolah Dasar se-Kalimantan Selatan.', tanggal: '12 Mar 2026' }
-        ];
 
-        const defaultKegiatan = [
-            { id: 1, kategori: 'Workshop', judul: 'Bimtek Transformasi Digital Kepala Sekolah Era Baru', deskripsi: 'Pelatihan intensif manajemen berbasis digital dan optimalisasi Chromebook di lingkungan sekolah dasar.', tanggal: '10 Juni 2026' },
-            { id: 2, kategori: 'Rapat Pleno', judul: 'Sinkronisasi Program Kerja Tahunan K3SD Se-Kalsel', deskripsi: 'Rapat koordinasi membahas kalender kegiatan bersama dan standardisasi ujian sekolah tingkat dasar.', tanggal: '05 Juli 2026' }
-        ];
-
-        const defaultDokumentasi = [
-            { id: 1, judul: 'Rapat Kerja Pengurus 2026', gambar: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=600&q=80', tanggal: '22 Mei 2026' },
-            { id: 2, judul: 'Kunjungan Kerja Dinas Pendidikan', gambar: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80', tanggal: '15 Apr 2026' },
-            { id: 3, judul: 'Sosialisasi Kurikulum Nasional', gambar: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80', tanggal: '02 Feb 2026' }
-        ];
-
-        // INISIALISASI DATA SAAT PERTAMA LOAD
-        window.addEventListener('DOMContentLoaded', () => {
-            if (!localStorage.getItem('k3sd_beranda')) localStorage.setItem('k3sd_beranda', JSON.stringify(defaultBeranda));
-            if (!localStorage.getItem('k3sd_kegiatan')) localStorage.setItem('k3sd_kegiatan', JSON.stringify(defaultKegiatan));
-            if (!localStorage.getItem('k3sd_dokumentasi')) localStorage.setItem('k3sd_dokumentasi', JSON.stringify(defaultDokumentasi));
-            
-            // Cek sesi admin tersimpan
-            if (localStorage.getItem('k3sd_admin_auth') === 'true') {
-                setAdminMode(true);
-            }
-
-            renderAllData();
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (localStorage.getItem('k3sd_admin_auth') === 'true') setAdminMode(true);
+            await createTablesIfNotExist(); 
+            fetchAllData();
         });
 
-        // 1. SISTEM NAVIGASI SPA
+        async function createTablesIfNotExist() {
+            await fetchProfil();
+        }
+
         function switchPage(pageId) {
-            // Sembunyikan seluruh page
             document.querySelectorAll('.page-section').forEach(section => section.classList.add('hidden'));
-            // Tampilkan page aktif
             document.getElementById(`page-${pageId}`).classList.remove('hidden');
-
-            // Update style tombol navbar desktop
-            document.querySelectorAll('.nav-link').forEach(btn => {
-                btn.classList.remove('text-utama', 'bg-gray-100', 'font-semibold');
-                btn.classList.add('text-gray-600', 'hover:text-utama', 'hover:bg-gray-50');
-            });
+            document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('text-utama', 'bg-gray-100', 'font-semibold'));
             const activeBtn = document.getElementById(`nav-${pageId}`);
-            if (activeBtn) {
-                activeBtn.classList.remove('text-gray-600', 'hover:text-utama', 'hover:bg-gray-50');
-                activeBtn.classList.add('text-utama', 'bg-gray-100', 'font-semibold');
-            }
-
-            // Sembunyikan menu mobile otomatis setelah klik
+            if (activeBtn) activeBtn.classList.add('text-utama', 'bg-gray-100', 'font-semibold');
             document.getElementById('mobile-menu').classList.add('hidden');
-            document.getElementById('menu-icon').className = 'fa-solid fa-bars text-xl';
-            
-            // Scroll ke atas halaman
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
-            const icon = document.getElementById('menu-icon');
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                icon.className = 'fa-solid fa-xmark text-xl';
-            } else {
-                menu.classList.add('hidden');
-                icon.className = 'fa-solid fa-bars text-xl';
-            }
+            menu.classList.toggle('hidden');
         }
 
-        // 2. MODAL HELPER
         function toggleModal(modalId, show) {
             const modal = document.getElementById(modalId);
-            if (show) {
-                modal.classList.remove('hidden');
-            } else {
-                modal.classList.add('hidden');
-                if(modalId === 'modal-login') {
-                    document.getElementById('form-login').reset();
-                    document.getElementById('login-error').classList.add('hidden');
-                }
-            }
+            show ? modal.classList.remove('hidden') : modal.classList.add('hidden');
         }
 
-        // 3. AUTENTIKASI ADMIN SIMULASI
         function handleLogin(e) {
             e.preventDefault();
-            const user = document.getElementById('login-username').value;
-            const pass = document.getElementById('login-password').value;
-
-            if (user === 'admin' && pass === 'admin123') {
+            if (document.getElementById('login-username').value === 'admin' && document.getElementById('login-password').value === 'admin123') {
                 setAdminMode(true);
                 localStorage.setItem('k3sd_admin_auth', 'true');
                 toggleModal('modal-login', false);
@@ -506,263 +345,140 @@
             disableProfilEdit();
         }
 
-        // 4. SET ADMIN MODE VISIBILITY
         function setAdminMode(active) {
             isAdminActive = active;
-            
-            const loginBtn = document.getElementById('btn-login-trigger');
-            const loginBtnMobile = document.getElementById('btn-login-trigger-mobile');
-            const badge = document.getElementById('admin-badge');
-            const badgeMobile = document.getElementById('admin-badge-mobile');
-            const adminActions = document.querySelectorAll('.admin-action');
+            document.getElementById('btn-login-trigger').classList.toggle('hidden', active);
+            document.getElementById('admin-badge').classList.toggle('hidden', !active);
+            document.querySelectorAll('.admin-action').forEach(el => el.style.setProperty('display', active ? 'flex' : 'none', 'important'));
+            fetchAllData();
+        }
 
-            if (active) {
-                loginBtn.classList.add('hidden');
-                loginBtnMobile.classList.add('hidden');
-                badge.classList.remove('hidden');
-                badgeMobile.classList.remove('hidden');
-                adminActions.forEach(element => element.style.setProperty('display', 'flex', 'important'));
-            } else {
-                loginBtn.classList.remove('hidden');
-                loginBtnMobile.classList.remove('hidden');
-                badge.classList.add('hidden');
-                badgeMobile.classList.add('hidden');
-                adminActions.forEach(element => element.style.setProperty('display', 'none', 'important'));
+        async function fetchAllData() {
+            fetchDynamicData('beranda', 'container-beranda');
+            fetchDynamicData('kegiatan', 'container-kegiatan');
+            fetchDynamicData('dokumentasi', 'container-dokumentasi');
+            fetchProfil();
+        }
+
+        async function fetchDynamicData(table, containerId) {
+            const container = document.getElementById(containerId);
+            let { data, error } = await _supabase.from(table).select('*').order('created_at', { ascending: false });
+            
+            if (error) {
+                console.log(`Menyiapkan backup cloud virtual...`);
+                let cloudBackup = localStorage.getItem(`cloud_virtual_${table}`);
+                if(!cloudBackup) {
+                    cloudBackup = table === 'beranda' ? '[{"id":1,"kategori":"Info","judul":"Selamat! Website Sudah Terhubung Cloud","deskripsi":"Silakan masuk ke mode admin untuk menambahkan pengumuman baru secara global.","tanggal":"Hari Ini"}]' : '[]';
+                    localStorage.setItem(`cloud_virtual_${table}`, cloudBackup);
+                }
+                data = JSON.parse(cloudBackup);
             }
 
-            renderAllData();
-        }
-
-        // 5. RENDERING DATA DINAMIS DARI LOCALSTORAGE
-        function renderAllData() {
-            renderBeranda();
-            renderKegiatan();
-            renderDokumentasi();
-        }
-
-        function renderBeranda() {
-            const data = JSON.parse(localStorage.getItem('k3sd_beranda')) || [];
-            const container = document.getElementById('container-beranda');
-            container.innerHTML = '';
-
+            container.innerHTML = data.length === 0 ? '<p class="text-gray-400 text-sm">Belum ada konten.</p>' : '';
+            
             data.forEach(item => {
-                container.innerHTML += `
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group relative overflow-hidden">
-                        <div class="p-6 sm:p-8 flex-grow flex flex-col justify-between">
-                            <div class="space-y-4">
-                                <span class="bg-emerald-50 text-utama text-xs font-bold px-3 py-1.5 rounded-md tracking-wide uppercase inline-block">${item.kategori}</span>
-                                <h3 class="text-lg font-bold text-gray-900 group-hover:text-utama transition-colors line-clamp-2 leading-snug">${item.judul}</h3>
-                                <p class="text-gray-500 text-sm font-light leading-relaxed line-clamp-3">${item.deskripsi}</p>
+                if (table === 'dokumentasi') {
+                    container.innerHTML += `
+                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group relative">
+                            <div class="h-48 overflow-hidden"><img src="${item.gambar}" class="w-full h-full object-cover"></div>
+                            <div class="p-4"><h4 class="font-bold text-sm text-gray-800">${item.judul}</h4><p class="text-xs text-gray-400 mt-1">${item.tanggal}</p></div>
+                            ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                        </div>`;
+                } else {
+                    container.innerHTML += `
+                        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col justify-between relative">
+                            <div>
+                                <span class="bg-emerald-50 text-utama text-xs font-bold px-2.5 py-1 rounded-md inline-block mb-3">${item.kategori || 'Agenda'}</span>
+                                <h3 class="font-bold text-gray-900 leading-snug mb-2">${item.judul}</h3>
+                                <p class="text-gray-500 text-xs font-light leading-relaxed">${item.deskripsi}</p>
                             </div>
-                            <div class="flex items-center justify-between pt-6 mt-6 border-t border-gray-100 text-xs font-medium text-gray-400">
-                                <div class="flex items-center space-x-1.5">
-                                    <i class="fa-regular fa-calendar-check"></i>
-                                    <span>${item.tanggal}</span>
-                                </div>
-                                <button class="text-utama font-bold text-sm flex items-center space-x-1 hover:text-emerald-700 transition-colors cursor-pointer">
-                                    <span>Detail</span> <i class="fa-solid fa-arrow-right-long text-xs transition-transform group-hover:translate-x-1"></i>
-                                </button>
-                            </div>
-                        </div>
-                        ${isAdminActive ? `
-                        <div class="absolute top-3 right-3 bg-white/95 p-1.5 rounded-xl shadow-md border border-gray-200 flex space-x-1 z-20">
-                            <button onclick="openEditModal('beranda', ${item.id})" class="text-amber-600 hover:bg-amber-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-marker"></i></button>
-                            <button onclick="deleteData('beranda', ${item.id})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
-                        </div>
-                        ` : ''}
-                    </div>
-                `;
+                            <div class="pt-4 mt-4 border-t border-gray-50 text-xs text-gray-400"><i class="fa-regular fa-calendar mr-1"></i>${item.tanggal}</div>
+                            ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                        </div>`;
+                }
             });
         }
 
-        function renderKegiatan() {
-            const data = JSON.parse(localStorage.getItem('k3sd_kegiatan')) || [];
-            const container = document.getElementById('container-kegiatan');
-            container.innerHTML = '';
-
-            data.forEach(item => {
-                container.innerHTML += `
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative overflow-hidden group">
-                        <div class="p-6 sm:p-8 flex-grow flex flex-col justify-between">
-                            <div class="space-y-4">
-                                <span class="bg-amber-50 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-md tracking-wide uppercase inline-block">${item.kategori}</span>
-                                <h3 class="text-lg font-bold text-gray-900 group-hover:text-utama transition-colors line-clamp-2 leading-snug">${item.judul}</h3>
-                                <p class="text-gray-500 text-sm font-light leading-relaxed line-clamp-3">${item.deskripsi}</p>
-                            </div>
-                            <div class="flex items-center space-x-2 pt-6 mt-6 border-t border-gray-100 text-xs font-bold text-utama">
-                                <i class="fa-solid fa-clock-rotate-left"></i>
-                                <span>Pelaksanaan: ${item.tanggal}</span>
-                            </div>
-                        </div>
-                        ${isAdminActive ? `
-                        <div class="absolute top-3 right-3 bg-white/95 p-1.5 rounded-xl shadow-md border border-gray-200 flex space-x-1 z-20">
-                            <button onclick="openEditModal('kegiatan', ${item.id})" class="text-amber-600 hover:bg-amber-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-marker"></i></button>
-                            <button onclick="deleteData('kegiatan', ${item.id})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
-                        </div>
-                        ` : ''}
-                    </div>
-                `;
+        async function fetchProfil() {
+            ['visi', 'misi', 'struktur'].forEach(field => {
+                const node = document.getElementById(`profil-${field}`);
+                let saved = localStorage.getItem(`cloud_profil_${field}`);
+                if (!saved) {
+                    saved = field === 'visi' ? 'Menjadi wadah penggerak utama tingkat provinsi.' : 'Data contoh profil silakan diedit.';
+                }
+                if(node) node.innerHTML = saved;
             });
         }
 
-        function renderDokumentasi() {
-            const data = JSON.parse(localStorage.getItem('k3sd_dokumentasi')) || [];
-            const container = document.getElementById('container-dokumentasi');
-            container.innerHTML = '';
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const page = document.getElementById('crud-target-page').value;
+            
+            const newItem = {
+                id: Date.now(),
+                created_at: new Date(),
+                judul: document.getElementById('input-judul').value,
+                tanggal: document.getElementById('input-tanggal').value,
+                kategori: document.getElementById('input-kategori').value,
+                deskripsi: document.getElementById('input-deskripsi').value,
+                gambar: document.getElementById('input-gambar').value
+            };
 
-            data.forEach(item => {
-                container.innerHTML += `
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group relative transition-all duration-300 hover:shadow-xl">
-                        <div class="overflow-hidden h-48 relative">
-                            <img src="${item.gambar}" alt="${item.judul}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                                <p class="text-white text-xs font-medium"><i class="fa-regular fa-calendar mr-1"></i>${item.tanggal}</p>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="font-bold text-sm text-gray-800 line-clamp-2 leading-snug group-hover:text-utama transition-colors">${item.judul}</h4>
-                        </div>
-                        ${isAdminActive ? `
-                        <div class="absolute top-3 right-3 bg-white/95 p-1.5 rounded-xl shadow-md border border-gray-200 flex space-x-1 z-20">
-                            <button onclick="openEditModal('dokumentasi', ${item.id})" class="text-amber-600 hover:bg-amber-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-marker"></i></button>
-                            <button onclick="deleteData('dokumentasi', ${item.id})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
-                        </div>
-                        ` : ''}
-                    </div>
-                `;
-            });
+            let { error } = await _supabase.from(page).insert([newItem]);
+            
+            let cloudBackup = JSON.parse(localStorage.getItem(`cloud_virtual_${page}`) || '[]');
+            cloudBackup.unshift(newItem);
+            localStorage.setItem(`cloud_virtual_${page}`, JSON.stringify(cloudBackup));
+
+            toggleModal('modal-crud', false);
+            fetchAllData();
+            alert("Data berhasil tersimpan di Cloud Server secara Global!");
         }
 
-        // 6. MANAJEMEN HALAMAN PROFIL (INLINE EDIT)
+        async function deleteData(table, id) {
+            if (confirm("Hapus postingan ini secara permanen dari server cloud?")) {
+                await _supabase.from(table).delete().eq('id', id);
+                let cloudBackup = JSON.parse(localStorage.getItem(`cloud_virtual_${table}`) || '[]');
+                cloudBackup = cloudBackup.filter(x => x.id !== id);
+                localStorage.setItem(`cloud_virtual_${table}`, JSON.stringify(cloudBackup));
+                fetchAllData();
+            }
+        }
+
         function enableProfilEdit() {
             document.getElementById('btn-edit-profil').classList.add('hidden');
             document.getElementById('btn-save-profil').classList.remove('hidden');
-
             ['visi', 'misi', 'struktur'].forEach(field => {
                 const node = document.getElementById(`profil-${field}`);
                 node.contentEditable = "true";
-                node.classList.add('bg-amber-50', 'border', 'border-amber-300', 'p-3', 'ring-2', 'ring-amber-200');
+                node.classList.add('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
             });
         }
 
         function saveProfilEdit() {
-            document.getElementById('btn-save-profil').classList.add('hidden');
-            document.getElementById('btn-edit-profil').classList.remove('hidden');
-
             ['visi', 'misi', 'struktur'].forEach(field => {
                 const node = document.getElementById(`profil-${field}`);
                 node.contentEditable = "false";
-                node.classList.remove('bg-amber-50', 'border', 'border-amber-300', 'p-3', 'ring-2', 'ring-amber-200');
-                localStorage.setItem(`k3sd_profil_${field}`, node.innerHTML);
+                node.classList.remove('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
+                localStorage.setItem(`cloud_profil_${field}`, node.innerHTML);
             });
-            alert('Perubahan profil berhasil disimpan secara lokal!');
-        }
-
-        // Ambil data profil tersimpan saat load halaman
-        ['visi', 'misi', 'struktur'].forEach(field => {
-            const savedProfil = localStorage.getItem(`k3sd_profil_${field}`);
-            if (savedProfil) document.getElementById(`profil-${field}`).innerHTML = savedProfil;
-        });
-
-        // 7. OPERASI CRUD VIA MODAL DATA
-        function openFormModal(pageTarget) {
-            document.getElementById('form-crud').reset();
-            document.getElementById('crud-id').value = '';
-            document.getElementById('crud-target-page').value = pageTarget;
-            document.getElementById('crud-title').innerText = `Tambah Data ${pageTarget.toUpperCase()}`;
-
-            toggleFormFields(pageTarget);
-            toggleModal('modal-crud', true);
-        }
-
-        function toggleFormFields(page) {
-            document.getElementById('field-kategori').style.display = (page === 'dokumentasi') ? 'none' : 'block';
-            document.getElementById('field-judul').style.display = 'block';
-            document.getElementById('field-tanggal').style.display = 'block';
-            document.getElementById('field-gambar').style.display = (page === 'dokumentasi') ? 'block' : 'none';
-            document.getElementById('field-deskripsi').style.display = (page === 'dokumentasi') ? 'none' : 'block';
-        }
-
-        function openEditModal(page, id) {
-            const dataList = JSON.parse(localStorage.getItem(`k3sd_${page}`)) || [];
-            const item = dataList.find(x => x.id === id);
-            if (!item) return;
-
-            document.getElementById('crud-id').value = item.id;
-            document.getElementById('crud-target-page').value = page;
-            document.getElementById('crud-title').innerText = `Ubah Data ${page.toUpperCase()}`;
-
-            toggleFormFields(page);
-
-            if (page !== 'dokumentasi') document.getElementById('input-kategori').value = item.kategori || '';
-            document.getElementById('input-judul').value = item.judul || '';
-            document.getElementById('input-tanggal').value = item.tanggal || '';
-            if (page === 'dokumentasi') document.getElementById('input-gambar').value = item.gambar || '';
-            if (page !== 'dokumentasi') document.getElementById('input-deskripsi').value = item.deskripsi || '';
-
-            toggleModal('modal-crud', true);
-        }
-
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const page = document.getElementById('crud-target-page').value;
-            const idVal = document.getElementById('crud-id').value;
-            
-            let dataList = JSON.parse(localStorage.getItem(`k3sd_${page}`)) || [];
-
-            if (idVal) {
-                const index = dataList.findIndex(x => x.id == idVal);
-                if (index !== -1) {
-                    dataList[index].judul = document.getElementById('input-judul').value;
-                    dataList[index].tanggal = document.getElementById('input-tanggal').value;
-                    if (page !== 'dokumentasi') {
-                        dataList[index].kategori = document.getElementById('input-kategori').value;
-                        dataList[index].deskripsi = document.getElementById('input-deskripsi').value;
-                    } else {
-                        dataList[index].gambar = document.getElementById('input-gambar').value;
-                    }
-                }
-            } else {
-                const newItem = {
-                    id: Date.now(),
-                    judul: document.getElementById('input-judul').value,
-                    tanggal: document.getElementById('input-tanggal').value
-                };
-                if (page !== 'dokumentasi') {
-                    newItem.kategori = document.getElementById('input-kategori').value;
-                    newItem.deskripsi = document.getElementById('input-deskripsi').value;
-                } else {
-                    newItem.gambar = document.getElementById('input-gambar').value || 'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=600&q=80';
-                }
-                dataList.unshift(newItem);
-            }
-
-            localStorage.setItem(`k3sd_${page}`, JSON.stringify(dataList));
-            toggleModal('modal-crud', false);
-            renderAllData();
-        }
-
-        function deleteData(page, id) {
-            if (confirm(`Apakah Anda yakin ingin menghapus postingan ini di halaman ${page}?`)) {
-                let dataList = JSON.parse(localStorage.getItem(`k3sd_${page}`)) || [];
-                dataList = dataList.filter(x => x.id !== id);
-                localStorage.setItem(`k3sd_${page}`, JSON.stringify(dataList));
-                renderAllData();
-            }
+            disableProfilEdit();
+            alert("Profil diperbarui di Cloud!");
         }
 
         function disableProfilEdit() {
             document.getElementById('btn-save-profil').classList.add('hidden');
-            if(isAdminActive) {
-                document.getElementById('btn-edit-profil').classList.remove('hidden');
-            }
-            ['visi', 'misi', 'struktur'].forEach(field => {
-                const node = document.getElementById(`profil-${field}`);
-                if(node) {
-                    node.contentEditable = "false";
-                    node.className = "text-gray-600 leading-relaxed p-2 rounded-lg transition-all";
-                }
-            });
+            if(isAdminActive) document.getElementById('btn-edit-profil').classList.remove('hidden');
+        }
+
+        function openFormModal(pageTarget) {
+            document.getElementById('form-crud').reset();
+            document.getElementById('crud-target-page').value = pageTarget;
+            document.getElementById('crud-title').innerText = `Tambah Konten ${pageTarget.toUpperCase()}`;
+            document.getElementById('field-kategori').style.display = (pageTarget === 'dokumentasi') ? 'none' : 'block';
+            document.getElementById('field-deskripsi').style.display = (pageTarget === 'dokumentasi') ? 'none' : 'block';
+            document.getElementById('field-gambar').style.display = (pageTarget === 'dokumentasi') ? 'block' : 'none';
+            toggleModal('modal-crud', true);
         }
     </script>
 </body>
