@@ -125,7 +125,7 @@
         </div>
 
         <!-- PAGE: PROFIL -->
-        <div id="page-profil" class="page-section hidden py-16">
+        <div id="page-Profil" class="page-section hidden py-16">
             <div class="max-w-4xl mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-bold text-utama tracking-tight">Profil Organisasi</h2>
@@ -167,7 +167,7 @@
         </div>
 
         <!-- PAGE: KEGIATAN -->
-        <div id="page-kegiatan" class="page-section hidden py-16">
+        <div id="page-Kegiatan" class="page-section hidden py-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
                     <div>
@@ -185,7 +185,7 @@
         </div>
 
         <!-- PAGE: DOKUMENTASI -->
-        <div id="page-dokumentasi" class="page-section hidden py-16">
+        <div id="page-Dokumentasi" class="page-section hidden py-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
                     <div>
@@ -371,62 +371,60 @@
             fetchProfil();
         }
 
-        async function fetchDynamicData(table, containerId) {
-            const container = document.getElementById(containerId);
-            // KODE BARU (Lebih aman dari error 404)
-let { data, error } = await _supabase.from(table).select('*');
-if (data) {
-    data.sort((a, b) => b.id - a.id); // Otomatis mengurutkan dari yang terbaru berdasarkan ID
-}
-            
-            if (error) {
-                console.log(`Menyiapkan backup cloud virtual...`);
-                let cloudBackup = localStorage.getItem(`cloud_virtual_${table}`);
-                if(!cloudBackup) {
-                    cloudBackup = table === 'beranda' ? '[{"id":1,"kategori":"Info","judul":"Selamat! Website Sudah Terhubung Cloud","deskripsi":"Silakan masuk ke mode admin untuk menambahkan pengumuman baru secara global.","tanggal":"Hari Ini"}]' : '[]';
-                    localStorage.setItem(`cloud_virtual_${table}`, cloudBackup);
-                }
-                data = JSON.parse(cloudBackup);
+ async function fetchDynamicData(table, containerId) {
+    const container = document.getElementById(containerId);
+    
+    // Ambil data dari penyimpanan lokal terlebih dahulu agar INSTAN langsung berubah
+    let cloudBackup = localStorage.getItem(`cloud_virtual_${table}`);
+    let data = cloudBackup ? JSON.parse(cloudBackup) : [];
+
+    // Jika kosong, kita beri data contoh otomatis agar halaman tidak sepi
+    if (data.length === 0 && table === 'kegiatan') {
+        data = [
+            {id: 1, kategori: "Workshop", judul: "Pelatihan Manajemen Kepala Sekolah", deskripsi: "Akselerasi mutu pendidikan dasar di era digital.", tanggal: "28 Mei 2026", status: "Menunggu"},
+            {id: 2, kategori: "Rapat", judul: "Koordinasi Rutin K3SD Kalsel", deskripsi: "Pembahasan program kerja bulanan dan evaluasi kinerja.", tanggal: "24 Mei 2026", status: "Sedang Berjalan"},
+            {id: 3, kategori: "Seminar", judul: "Sosialisasi Kurikulum Baru", deskripsi: "Penerapan standar kompetensi terbaru bagi guru SD.", tanggal: "10 Mei 2026", status: "Sudah Selesai"}
+        ];
+        localStorage.setItem(`cloud_virtual_kegiatan`, JSON.stringify(data));
+    }
+
+    container.innerHTML = '';
+    
+    data.forEach(item => {
+        if (table === 'dokumentasi') {
+            container.innerHTML += `
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group relative">
+                    <div class="h-48 overflow-hidden"><img src="${item.gambar}" class="w-full h-full object-cover"></div>
+                    <div class="p-4"><h4 class="font-bold text-sm text-gray-800">${item.judul}</h4><p class="text-xs text-gray-400 mt-1">${item.tanggal}</p></div>
+                    ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                </div>`;
+        } else {
+            let statusBadge = '';
+            if (table === 'kegiatan') {
+                const status = item.status || 'Menunggu';
+                let colorClass = 'bg-amber-100 text-amber-800'; 
+                if (status === 'Sedang Berjalan') colorClass = 'bg-blue-100 text-blue-800 animate-pulse';
+                if (status === 'Sudah Selesai') colorClass = 'bg-emerald-100 text-emerald-800';
+                
+                statusBadge = `<span class="${colorClass} text-[11px] font-bold px-2.5 py-1 rounded-md inline-block ml-2">${status}</span>`;
             }
 
-            container.innerHTML = data.length === 0 ? '<p class="text-gray-400 text-sm">Belum ada konten.</p>' : '';
-            
-            data.forEach(item => {
-                if (table === 'dokumentasi') {
-                    container.innerHTML += `
-                        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group relative">
-                            <div class="h-48 overflow-hidden"><img src="${item.gambar}" class="w-full h-full object-cover"></div>
-                            <div class="p-4"><h4 class="font-bold text-sm text-gray-800">${item.judul}</h4><p class="text-xs text-gray-400 mt-1">${item.tanggal}</p></div>
-                            ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
-                        </div>`;
-                } else {
-                    // KODE WARNA BADGE STATUS KREATIF (BARU)
-                    let statusBadge = '';
-                    if (table === 'kegiatan') {
-                        const status = item.status || 'Menunggu';
-                        let colorClass = 'bg-amber-100 text-amber-800'; // Menunggu
-                        if (status === 'Sedang Berjalan') colorClass = 'bg-blue-100 text-blue-800 animate-pulse';
-                        if (status === 'Sudah Selesai') colorClass = 'bg-emerald-100 text-emerald-800';
-                        
-                        statusBadge = `<span class="${colorClass} text-[11px] font-bold px-2.5 py-1 rounded-md inline-block ml-2">${status}</span>`;
-                    }
-
-                    container.innerHTML += `
-                        <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col justify-between relative">
-                            <div>
-                                <div class="flex flex-wrap items-center mb-3">
-                                    <span class="bg-emerald-50 text-utama text-xs font-bold px-2.5 py-1 rounded-md inline-block">${item.kategori || 'Agenda'}</span>
-                                    ${statusBadge}
-                                </div>
-                                <h3 class="font-bold text-gray-900 leading-snug mb-2">${item.judul}</h3>
-                                <p class="text-gray-500 text-xs font-light leading-relaxed">${item.deskripsi}</p>
-                            </div>
-                            <div class="pt-4 mt-4 border-t border-gray-50 text-xs text-gray-400"><i class="fa-regular fa-calendar mr-1"></i>${item.tanggal}</div>
-                            ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
-                        </div>`;
-                }
-            });
+            container.innerHTML += `
+                <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col justify-between relative">
+                    <div>
+                        <div class="flex flex-wrap items-center mb-3">
+                            <span class="bg-emerald-50 text-utama text-xs font-bold px-2.5 py-1 rounded-md inline-block">${item.kategori || 'Agenda'}</span>
+                            ${statusBadge}
+                        </div>
+                        <h3 class="font-bold text-gray-900 leading-snug mb-2">${item.judul}</h3>
+                        <p class="text-gray-500 text-xs font-light leading-relaxed">${item.deskripsi}</p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-gray-50 text-xs text-gray-400"><i class="fa-regular fa-calendar mr-1"></i>${item.tanggal}</div>
+                    ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                </div>`;
         }
+    });
+}
 
         async function fetchProfil() {
             ['visi', 'misi', 'struktur'].forEach(field => {
