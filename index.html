@@ -471,32 +471,47 @@
             });
         }
 
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-            const page = document.getElementById('crud-target-page').value;
-            
-            const newItem = {
-                id: Date.now(),
-                created_at: new Date(),
-                judul: document.getElementById('input-judul').value,
-                tanggal: document.getElementById('input-tanggal').value,
-                jam: document.getElementById('input-jam').value, // Ambil nilai jam pelaksanaaan
-                kategori: document.getElementById('input-kategori').value,
-                deskripsi: document.getElementById('input-deskripsi').value,
-                gambar: document.getElementById('input-gambar').value,
-                status: document.getElementById('input-status').value
-            };
+       async function handleFormSubmit(e) {
+    e.preventDefault();
+    const page = document.getElementById('crud-target-page').value;
+    
+    // 1. Buat objek data dasar yang pasti ada di semua halaman (Beranda, Kegiatan, Dokumentasi)
+    const newItem = {
+        id: Date.now(),
+        created_at: new Date(),
+        judul: document.getElementById('input-judul').value,
+        tanggal: document.getElementById('input-tanggal').value
+    };
 
-            let { error } = await _supabase.from(page).insert([newItem]);
-            
-            let cloudBackup = JSON.parse(localStorage.getItem(`cloud_virtual_${page}`) || '[]');
-            cloudBackup.unshift(newItem);
-            localStorage.setItem(`cloud_virtual_${page}`, JSON.stringify(cloudBackup));
+    // 2. Isi kolom khusus Halaman KEGIATAN saja agar tabel Beranda tidak error 400
+    if (page === 'kegiatan') {
+        newItem.jam = document.getElementById('input-jam').value;
+        newItem.status = document.getElementById('input-status').value;
+        newItem.kategori = document.getElementById('input-kategori').value || 'Agenda';
+        newItem.deskripsi = document.getElementById('input-deskripsi').value;
+    } 
+    // 3. Isi kolom khusus Halaman BERANDA
+    else if (page === 'beranda') {
+        newItem.kategori = document.getElementById('input-kategori').value || 'Info';
+        newItem.deskripsi = document.getElementById('input-deskripsi').value;
+    }
+    // 4. Isi kolom khusus Halaman DOKUMENTASI
+    else if (page === 'dokumentasi') {
+        newItem.gambar = document.getElementById('input-gambar').value;
+    }
 
-            toggleModal('modal-crud', false);
-            fetchAllData();
-            alert("Data berhasil tersimpan di Cloud Server secara Global!");
-        }
+    // Kirim ke database cloud Supabase asli
+    let { error } = await _supabase.from(page).insert([newItem]);
+    
+    // Backup lokal tetap berjalan jika sewaktu-waktu offline
+    let cloudBackup = JSON.parse(localStorage.getItem(`cloud_virtual_${page}`) || '[]');
+    cloudBackup.unshift(newItem);
+    localStorage.setItem(`cloud_virtual_${page}`, JSON.stringify(cloudBackup));
+
+    toggleModal('modal-crud', false);
+    fetchAllData();
+    alert("Data berhasil tersimpan di Cloud Server secara Global!");
+}
 
         async function deleteData(table, id) {
             if (confirm("Hapus postingan ini secara permanen dari server cloud?")) {
