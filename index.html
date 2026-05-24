@@ -373,7 +373,11 @@
 
         async function fetchDynamicData(table, containerId) {
             const container = document.getElementById(containerId);
-            let { data, error } = await _supabase.from(table).select('*').order('created_at', { ascending: false });
+            // KODE BARU (Lebih aman dari error 404)
+let { data, error } = await _supabase.from(table).select('*');
+if (data) {
+    data.sort((a, b) => b.id - a.id); // Otomatis mengurutkan dari yang terbaru berdasarkan ID
+}
             
             if (error) {
                 console.log(`Menyiapkan backup cloud virtual...`);
