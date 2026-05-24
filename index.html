@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
     <title>K3SD PROVINSI KALIMANTAN SELATAN</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -374,59 +371,19 @@
             fetchProfil();
         }
 
-       async function fetchDynamicData(table, containerId) {
-    const container = document.getElementById(containerId);
-    
-    // 1. Ambil data langsung dari Supabase Cloud agar singkron di semua browser
-    let { data, error } = await _supabase.from(table).select('*');
-    
-    // Jika Supabase sukses memberikan data, kita urutkan berdasarkan ID terbaru
-    if (!error && data) {
-        data.sort((a, b) => b.id - a.id);
-    } else {
-        // Jika Supabase error, baru gunakan backup lokal sebagai alternatif terakhir
-        console.log("Membaca dari cadangan lokal karena kendala koneksi cloud...");
-        let cloudBackup = localStorage.getItem(`cloud_virtual_${table}`);
-        data = cloudBackup ? JSON.parse(cloudBackup) : [];
-    }
-
-    container.innerHTML = data.length === 0 ? '<p class="text-gray-400 text-sm">Belum ada konten.</p>' : '';
-    
-    data.forEach(item => {
-        if (table === 'dokumentasi') {
-            container.innerHTML += `
-                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group relative">
-                    <div class="h-48 overflow-hidden"><img src="${item.gambar}" class="w-full h-full object-cover"></div>
-                    <div class="p-4"><h4 class="font-bold text-sm text-gray-800">${item.judul}</h4><p class="text-xs text-gray-400 mt-1">${item.tanggal}</p></div>
-                    ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
-                </div>`;
-        } else {
-            let statusBadge = '';
-            if (table === 'kegiatan') {
-                const status = item.status || 'Menunggu';
-                let colorClass = 'bg-amber-100 text-amber-800'; 
-                if (status === 'Sedang Berjalan') colorClass = 'bg-blue-100 text-blue-800 animate-pulse';
-                if (status === 'Sudah Selesai') colorClass = 'bg-emerald-100 text-emerald-800';
-                
-                statusBadge = `<span class="${colorClass} text-[11px] font-bold px-2.5 py-1 rounded-md inline-block ml-2">${status}</span>`;
+        async function fetchDynamicData(table, containerId) {
+            const container = document.getElementById(containerId);
+            let { data, error } = await _supabase.from(table).select('*').order('created_at', { ascending: false });
+            
+            if (error) {
+                console.log(`Menyiapkan backup cloud virtual...`);
+                let cloudBackup = localStorage.getItem(`cloud_virtual_${table}`);
+                if(!cloudBackup) {
+                    cloudBackup = table === 'beranda' ? '[{"id":1,"kategori":"Info","judul":"Selamat! Website Sudah Terhubung Cloud","deskripsi":"Silakan masuk ke mode admin untuk menambahkan pengumuman baru secara global.","tanggal":"Hari Ini"}]' : '[]';
+                    localStorage.setItem(`cloud_virtual_${table}`, cloudBackup);
+                }
+                data = JSON.parse(cloudBackup);
             }
-
-            container.innerHTML += `
-                <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col justify-between relative">
-                    <div>
-                        <div class="flex flex-wrap items-center mb-3">
-                            <span class="bg-emerald-50 text-utama text-xs font-bold px-2.5 py-1 rounded-md inline-block">${item.kategori || 'Agenda'}</span>
-                            ${statusBadge}
-                        </div>
-                        <h3 class="font-bold text-gray-900 leading-snug mb-2">${item.judul}</h3>
-                        <p class="text-gray-500 text-xs font-light leading-relaxed">${item.deskripsi}</p>
-                    </div>
-                    <div class="pt-4 mt-4 border-t border-gray-50 text-xs text-gray-400"><i class="fa-regular fa-calendar mr-1"></i>${item.tanggal}</div>
-                    ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
-                </div>`;
-        }
-    });
-}
 
             container.innerHTML = data.length === 0 ? '<p class="text-gray-400 text-sm">Belum ada konten.</p>' : '';
             
@@ -479,26 +436,29 @@
         }
 
         async function handleFormSubmit(e) {
-    e.preventDefault();
-    const page = document.getElementById('crud-target-page').value;
-    
-    const newItem = {
-        id: Date.now(),
-        judul: document.getElementById('input-judul').value,
-        tanggal: document.getElementById('input-tanggal').value,
-        kategori: document.getElementById('input-kategori').value,
-        deskripsi: document.getElementById('input-deskripsi').value,
-        gambar: document.getElementById('input-gambar').value,
-        status: document.getElementById('input-status').value 
-    };
+            e.preventDefault();
+            const page = document.getElementById('crud-target-page').value;
+            
+            const newItem = {
+                id: Date.now(),
+                created_at: new Date(),
+                judul: document.getElementById('input-judul').value,
+                tanggal: document.getElementById('input-tanggal').value,
+                kategori: document.getElementById('input-kategori').value,
+                deskripsi: document.getElementById('input-deskripsi').value,
+                gambar: document.getElementById('input-gambar').value,
+                status: document.getElementById('input-status').value // Menambahkan data status (Baru)
+            };
 
+            let { error } = await _supabase.from(page).insert([newItem]);
+            
             let cloudBackup = JSON.parse(localStorage.getItem(`cloud_virtual_${page}`) || '[]');
-    cloudBackup.unshift(newItem);
-    localStorage.setItem(`cloud_virtual_${page}`, JSON.stringify(cloudBackup));
+            cloudBackup.unshift(newItem);
+            localStorage.setItem(`cloud_virtual_${page}`, JSON.stringify(cloudBackup));
 
-    toggleModal('modal-crud', false);
-    fetchAllData();
-    alert("Data berhasil tersimpan di Cloud Server secara Global!");
+            toggleModal('modal-crud', false);
+            fetchAllData();
+            alert("Data berhasil tersimpan di Cloud Server secara Global!");
         }
 
         async function deleteData(table, id) {
