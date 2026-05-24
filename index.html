@@ -118,9 +118,51 @@
                         <i class="fa-solid fa-circle-plus"></i> <span>Tambah Pengumuman</span>
                     </button>
                 </div>
-                <div id="container-beranda" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <p class="text-gray-400 text-sm animate-pulse">Memuat data dari cloud server...</p>
+                
+                <!-- STRUKTUR BARU BERANDA: 2 KOLOM (KONTEN UTAMA & SIDEBAR INFO) -->
+                <div class="grid lg:grid-cols-12 gap-8 items-start">
+                    <!-- Kiri: Container Berita Utama (75% Lebar di layar Desktop) -->
+                    <div id="container-beranda" class="lg:col-span-8 grid sm:grid-cols-2 gap-6">
+                        <p class="text-gray-400 text-sm animate-pulse">Memuat data dari cloud server...</p>
+                    </div>
+
+                    <!-- Kanan: List Info Ringkas Tambahan (25% Lebar di layar Desktop) -->
+                    <div class="lg:col-span-4 space-y-6">
+                        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm sticky top-24">
+                            <h3 class="text-lg font-bold text-utama mb-4 flex items-center space-x-2">
+                                <i class="fa-solid fa-bullhorn text-aksen text-sm"></i>
+                                <span>Info Kilat & Tautan Resmi</span>
+                            </h3>
+                            <ul class="divide-y divide-gray-100 text-sm">
+                                <li class="py-3">
+                                    <a href="#" class="text-gray-600 hover:text-emerald-700 transition font-medium block">
+                                        <i class="fa-solid fa-chevron-right text-[10px] text-aksen mr-1.5"></i>
+                                        Jadwal Koordinasi Wilayah K3SD Kalsel 2026
+                                    </a>
+                                </li>
+                                <li class="py-3">
+                                    <a href="#" class="text-gray-600 hover:text-emerald-700 transition font-medium block">
+                                        <i class="fa-solid fa-chevron-right text-[10px] text-aksen mr-1.5"></i>
+                                        Sistem Akreditasi Sekolah Dasar Terpadu
+                                    </a>
+                                </li>
+                                <li class="py-3">
+                                    <a href="#" class="text-gray-600 hover:text-emerald-700 transition font-medium block">
+                                        <i class="fa-solid fa-chevron-right text-[10px] text-aksen mr-1.5"></i>
+                                        Link Pendaftaran Diklat Fungsional Kepsek
+                                    </a>
+                                </li>
+                                <li class="py-3">
+                                    <a href="#" class="text-gray-600 hover:text-emerald-700 transition font-medium block">
+                                        <i class="fa-solid fa-chevron-right text-[10px] text-aksen mr-1.5"></i>
+                                        Unduhan Buku Saku Kurikulum Merdeka
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
 
@@ -343,7 +385,6 @@
         });
 
        async function createTablesIfNotExist() {
-            // Memanggil fungsi profil yang benar saat halaman dimuat
             await fetchProfileData();
         }
 
@@ -396,7 +437,6 @@
             fetchDynamicData('beranda', 'container-beranda');
             fetchDynamicData('kegiatan', 'container-kegiatan');
             fetchDynamicData('dokumentasi', 'container-dokumentasi');
-            // Memanggil fungsi jembatan profil agar sinkron dengan panggilan lama
             fetchProfil();
         }
 
@@ -461,7 +501,6 @@
             });
         }
 
-        // ==================== FUNGSI UTAMA MEMUAT DATA PROFIL ====================
         async function fetchProfileData() {
             const { data, error } = await _supabase
                 .from('profil')
@@ -482,44 +521,8 @@
             }
         }
 
-        // ==================== FUNGSI JEMBATAN PANGGILAN PROFIL ====================
         async function fetchProfil() {
             await fetchProfileData();
-        }
-
-        // ==================== FUNGSI MENYIMPAN DATA PROFIL ====================
-        async function saveProfilEdit() {
-            const visiText = document.getElementById('profil-visi')?.innerHTML || '';
-            const misiText = document.getElementById('profil-misi')?.innerHTML || '';
-            const strukturText = document.getElementById('profil-struktur')?.innerHTML || '';
-
-            const updatedProfil = {
-                id: 1, 
-                created_at: new Date(),
-                visi: visiText,
-                misi: misiText,
-                struktur: strukturText
-            };
-
-            const { error } = await _supabase
-                .from('profil')
-                .upsert([updatedProfil], { onConflict: 'id' });
-
-            if (error) {
-                alert("Gagal menyimpan ke Cloud Supabase: " + error.message);
-                return;
-            }
-
-            ['visi', 'misi', 'struktur'].forEach(field => {
-                const node = document.getElementById(`profil-${field}`);
-                if (node) {
-                    node.contentEditable = "false";
-                    node.classList.remove('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
-                }
-            });
-
-            disableProfilEdit();
-            alert("Profil berhasil diperbarui di Cloud Server secara Global!");
         }
 
         function disableProfilEdit() {
@@ -528,46 +531,40 @@
         }
 
        async function handleFormSubmit(e) {
-    e.preventDefault();
-    const page = document.getElementById('crud-target-page').value;
-    
-    // 1. Buat objek data dasar yang pasti ada di semua halaman (Beranda, Kegiatan, Dokumentasi)
-    const newItem = {
-        id: Date.now(),
-        created_at: new Date(),
-        judul: document.getElementById('input-judul').value,
-        tanggal: document.getElementById('input-tanggal').value
-    };
+            e.preventDefault();
+            const page = document.getElementById('crud-target-page').value;
+            
+            const newItem = {
+                id: Date.now(),
+                created_at: new Date(),
+                judul: document.getElementById('input-judul').value,
+                tanggal: document.getElementById('input-tanggal').value
+            };
 
-    // 2. Isi kolom khusus Halaman KEGIATAN saja agar tabel Beranda tidak error 400
-    if (page === 'kegiatan') {
-        newItem.jam = document.getElementById('input-jam').value;
-        newItem.status = document.getElementById('input-status').value;
-        newItem.kategori = document.getElementById('input-kategori').value || 'Agenda';
-        newItem.deskripsi = document.getElementById('input-deskripsi').value;
-    } 
-    // 3. Isi kolom khusus Halaman BERANDA
-    else if (page === 'beranda') {
-        newItem.kategori = document.getElementById('input-kategori').value || 'Info';
-        newItem.deskripsi = document.getElementById('input-deskripsi').value;
-    }
-    // 4. Isi kolom khusus Halaman DOKUMENTASI
-    else if (page === 'dokumentasi') {
-        newItem.gambar = document.getElementById('input-gambar').value;
-    }
+            if (page === 'kegiatan') {
+                newItem.jam = document.getElementById('input-jam').value;
+                newItem.status = document.getElementById('input-status').value;
+                newItem.kategori = document.getElementById('input-kategori').value || 'Agenda';
+                newItem.deskripsi = document.getElementById('input-deskripsi').value;
+            } 
+            else if (page === 'beranda') {
+                newItem.kategori = document.getElementById('input-kategori').value || 'Info';
+                newItem.deskripsi = document.getElementById('input-deskripsi').value;
+            }
+            else if (page === 'dokumentasi') {
+                newItem.gambar = document.getElementById('input-gambar').value;
+            }
 
-    // Kirim ke database cloud Supabase asli
-    let { error } = await _supabase.from(page).insert([newItem]);
-    
-    // Backup lokal tetap berjalan jika sewaktu-waktu offline
-    let cloudBackup = JSON.parse(localStorage.getItem(`cloud_virtual_${page}`) || '[]');
-    cloudBackup.unshift(newItem);
-    localStorage.setItem(`cloud_virtual_${page}`, JSON.stringify(cloudBackup));
+            let { error } = await _supabase.from(page).insert([newItem]);
+            
+            let cloudBackup = JSON.parse(localStorage.getItem(`cloud_virtual_${page}`) || '[]');
+            cloudBackup.unshift(newItem);
+            localStorage.setItem(`cloud_virtual_${page}`, JSON.stringify(cloudBackup));
 
-    toggleModal('modal-crud', false);
-    fetchAllData();
-    alert("Data berhasil tersimpan di Cloud Server secara Global!");
-}
+            toggleModal('modal-crud', false);
+            fetchAllData();
+            alert("Data berhasil tersimpan di Cloud Server secara Global!");
+        }
 
         async function deleteData(table, id) {
             if (confirm("Hapus postingan ini secara permanen dari server cloud?")) {
@@ -590,35 +587,29 @@
         }
 
         async function saveProfilEdit() {
-    const visiText = document.getElementById('profil-visi')?.innerHTML || '';
-    const misiText = document.getElementById('profil-misi')?.innerHTML || '';
-    const strukturText = document.getElementById('profil-struktur')?.innerHTML || '';
+            const visiText = document.getElementById('profil-visi')?.innerHTML || '';
+            const misiText = document.getElementById('profil-misi')?.innerHTML || '';
+            const strukturText = document.getElementById('profil-struktur')?.innerHTML || '';
 
-    const { error } = await _supabase
-        .from('profil')
-        .upsert([{ id: 1, created_at: new Date(), visi: visiText, misi: misiText, struktur: strukturText }], { onConflict: 'id' });
+            const { error } = await _supabase
+                .from('profil')
+                .upsert([{ id: 1, created_at: new Date(), visi: visiText, misi: misiText, struktur: strukturText }], { onConflict: 'id' });
 
-    if (error) {
-        alert("Gagal menyimpan ke Cloud Supabase: " + error.message);
-        return;
-    }
+            if (error) {
+                alert("Gagal menyimpan ke Cloud Supabase: " + error.message);
+                return;
+            }
 
-    ['visi', 'misi', 'struktur'].forEach(field => {
-        const node = document.getElementById(`profil-${field}`);
-        if (node) {
-            node.contentEditable = "false";
-            node.classList.remove('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
-        }
-    });
+            ['visi', 'misi', 'struktur'].forEach(field => {
+                const node = document.getElementById(`profil-${field}`);
+                if (node) {
+                    node.contentEditable = "false";
+                    node.classList.remove('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
+                }
+            });
 
-    if (typeof disableProfileEdit === "function") disableProfileEdit();
-    else if (typeof disableProfilEdit === "function") disableProfilEdit();
-    
-    alert("Profil berhasil diperbarui di Cloud Server secara Global!");
-}
-        function disableProfilEdit() {
-            document.getElementById('btn-save-profil').classList.add('hidden');
-            if(isAdminActive) document.getElementById('btn-edit-profil').classList.remove('hidden');
+            disableProfilEdit();
+            alert("Profil berhasil diperbarui di Cloud Server secara Global!");
         }
 
         function openFormModal(pageTarget) {
@@ -630,7 +621,7 @@
             document.getElementById('field-deskripsi').style.display = (pageTarget === 'dokumentasi') ? 'none' : 'block';
             document.getElementById('field-gambar').style.display = (pageTarget === 'dokumentasi') ? 'block' : 'none';
             document.getElementById('field-status').style.display = (pageTarget === 'kegiatan') ? 'block' : 'none';
-            document.getElementById('field-jam').style.display = (pageTarget === 'kegiatan') ? 'block' : 'none'; // Hanya tampil di kegiatan
+            document.getElementById('field-jam').style.display = (pageTarget === 'kegiatan') ? 'block' : 'none';
             
             toggleModal('modal-crud', true);
         }
