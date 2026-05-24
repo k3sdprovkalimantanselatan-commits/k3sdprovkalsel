@@ -204,8 +204,11 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-utama text-gray-100 pt-12 pb-6 border-t border-emerald-900 text-center text-xs">
-        <p class="text-emerald-100/50">&copy; 2026 K3SD Provinsi Kalimantan Selatan. Database Cloud Aktif.</p>
+    <footer class="bg-utama text-gray-100 py-6 border-t border-emerald-900 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p class="text-emerald-100/50 order-2 sm:order-1">&copy; 2026 K3SD Provinsi Kalimantan Selatan. Database Cloud Aktif.</p>
+            <p class="text-amber-400 font-medium tracking-wide order-1 sm:order-2"><i class="fa-solid fa-code text-[10px] mr-1 opacity-70"></i>Author : Shalahuddin Al-Ayubi, M.Pd.</p>
+        </div>
     </footer>
 
     <!-- MODAL 1: LOGIN ADMIN -->
@@ -262,7 +265,7 @@
                             <input type="text" id="input-kategori" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white">
                         </div>
                         
-                        <!-- KOMLOM INPUT DROPDOWN STATUS (BARU) -->
+                        <!-- KOMLOM INPUT DROPDOWN STATUS -->
                         <div id="field-status">
                             <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Status Kegiatan</label>
                             <select id="input-status" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white">
@@ -302,8 +305,8 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // ================= CONFIG CLOUD DATABASE BERHASIL TERPASANG =================
-        const SUPABASE_URL = "https://xhhmbjhhebyjqhwytmwn.supabase.co"; 
-        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoaG1iamhoZWJ5anFod3l0bXduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NjAzODksImV4cCI6MjA5NTEzNjM4OX0.A_G63EFExIWOrRZHCl-nyOB_YV2tTxIGazaovW3KG7Q";
+        const SUPABASE_URL = "https://otpkhjnsaplkshsvblapz.supabase.co"; 
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im90cGtoanNhcGxrbGhzdmJsYXB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MTE4MDksImV4cCI6MjA5NTE4NzgwOX0.q9MeqJnyNxpc-dpym4eWDbCa_P9J_ElJg42uSi6dego";
         // ============================================================================
 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -396,7 +399,7 @@
                             ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
                         </div>`;
                 } else {
-                    // KODE WARNA BADGE STATUS KREATIF (BARU)
+                    // KODE WARNA BADGE STATUS KREATIF
                     let statusBadge = '';
                     if (table === 'kegiatan') {
                         const status = item.status || 'Menunggu';
@@ -447,7 +450,7 @@
                 kategori: document.getElementById('input-kategori').value,
                 deskripsi: document.getElementById('input-deskripsi').value,
                 gambar: document.getElementById('input-gambar').value,
-                status: document.getElementById('input-status').value // Menambahkan data status (Baru)
+                status: document.getElementById('input-status').value // Menambahkan data status
             };
 
             let { error } = await _supabase.from(page).insert([newItem]);
@@ -507,7 +510,7 @@
             document.getElementById('field-deskripsi').style.display = (pageTarget === 'dokumentasi') ? 'none' : 'block';
             document.getElementById('field-gambar').style.display = (pageTarget === 'dokumentasi') ? 'block' : 'none';
             
-            // Tampilkan pilihan status hanya di halaman kegiatan (Baru)
+            // Tampilkan pilihan status hanya di halaman kegiatan
             document.getElementById('field-status').style.display = (pageTarget === 'kegiatan') ? 'block' : 'none';
             
             toggleModal('modal-crud', true);
