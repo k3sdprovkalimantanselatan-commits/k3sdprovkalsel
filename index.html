@@ -316,6 +316,23 @@
             if (localStorage.getItem('k3sd_admin_auth') === 'true') setAdminMode(true);
             await createTablesIfNotExist(); 
             fetchAllData();
+
+            // =============== FITUR REALTIME AKTIF ===============
+            _supabase.channel('custom-beranda-channel')
+            .on('postgres_changes', { event: '*', filter: 'id=neq.0', schema: 'public', table: 'beranda' }, (payload) => {
+                fetchDynamicData('beranda', 'container-beranda');
+            }).subscribe();
+
+            _supabase.channel('custom-kegiatan-channel')
+            .on('postgres_changes', { event: '*', filter: 'id=neq.0', schema: 'public', table: 'kegiatan' }, (payload) => {
+                fetchDynamicData('kegiatan', 'container-kegiatan');
+            }).subscribe();
+
+            _supabase.channel('custom-dokumentasi-channel')
+            .on('postgres_changes', { event: '*', filter: 'id=neq.0', schema: 'public', table: 'dokumentasi' }, (payload) => {
+                fetchDynamicData('dokumentasi', 'container-dokumentasi');
+            }).subscribe();
+            // ====================================================
         });
 
         async function createTablesIfNotExist() {
@@ -399,11 +416,10 @@
                             ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
                         </div>`;
                 } else {
-                    // KODE WARNA BADGE STATUS KREATIF
                     let statusBadge = '';
                     if (table === 'kegiatan') {
                         const status = item.status || 'Menunggu';
-                        let colorClass = 'bg-amber-100 text-amber-800'; // Menunggu
+                        let colorClass = 'bg-amber-100 text-amber-800';
                         if (status === 'Sedang Berjalan') colorClass = 'bg-blue-100 text-blue-800 animate-pulse';
                         if (status === 'Sudah Selesai') colorClass = 'bg-emerald-100 text-emerald-800';
                         
@@ -450,7 +466,7 @@
                 kategori: document.getElementById('input-kategori').value,
                 deskripsi: document.getElementById('input-deskripsi').value,
                 gambar: document.getElementById('input-gambar').value,
-                status: document.getElementById('input-status').value // Menambahkan data status
+                status: document.getElementById('input-status').value
             };
 
             let { error } = await _supabase.from(page).insert([newItem]);
@@ -505,12 +521,9 @@
             document.getElementById('crud-target-page').value = pageTarget;
             document.getElementById('crud-title').innerText = `Tambah Konten ${pageTarget.toUpperCase()}`;
             
-            // PENGATURAN TAMPILAN ELEMEN FORM
             document.getElementById('field-kategori').style.display = (pageTarget === 'dokumentasi') ? 'none' : 'block';
             document.getElementById('field-deskripsi').style.display = (pageTarget === 'dokumentasi') ? 'none' : 'block';
             document.getElementById('field-gambar').style.display = (pageTarget === 'dokumentasi') ? 'block' : 'none';
-            
-            // Tampilkan pilihan status hanya di halaman kegiatan
             document.getElementById('field-status').style.display = (pageTarget === 'kegiatan') ? 'block' : 'none';
             
             toggleModal('modal-crud', true);
