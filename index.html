@@ -460,16 +460,31 @@
             });
         }
 
-        async function fetchProfil() {
-            ['visi', 'misi', 'struktur'].forEach(field => {
-                const node = document.getElementById(`profil-${field}`);
-                let saved = localStorage.getItem(`cloud_profil_${field}`);
-                if (!saved) {
-                    saved = field === 'visi' ? 'Menjadi wadah penggerak utama tingkat provinsi.' : 'Data contoh profil silakan diedit.';
-                }
-                if(node) node.innerHTML = saved;
-            });
+        async function fetchProfileData() {
+    // Mengambil data dari tabel 'profil' baris paling pertama
+    const { data, error } = await _supabase
+        .from('profil')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+    if (error) {
+        console.error("Gagal memuat profil dari Cloud:", error);
+        return;
+    }
+
+    if (data && data.length > 0) {
+        const profil = data[0];
+        
+        // Memasukkan data dari kolom 'visi' dan 'misi' Supabase ke ID HTML yang sesuai
+        if (document.getElementById('profil-visi')) {
+            document.getElementById('profil-visi').innerText = profil.visi || "Data visi belum diisi.";
         }
+        if (document.getElementById('profil-misi')) {
+            document.getElementById('profil-misi').innerText = profil.misi || "Data misi belum diisi.";
+        }
+    }
+}
 
        async function handleFormSubmit(e) {
     e.preventDefault();
@@ -533,16 +548,46 @@
             });
         }
 
-        function saveProfilEdit() {
-            ['visi', 'misi', 'struktur'].forEach(field => {
-                const node = document.getElementById(`profil-${field}`);
-                node.contentEditable = "false";
-                node.classList.remove('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
-                localStorage.setItem(`cloud_profil_${field}`, node.innerHTML);
-            });
-            disableProfilEdit();
-            alert("Profil diperbarui di Cloud!");
+        async function saveProfilEdit() {
+    // 1. Ambil teks terbaru dari layar HTML
+    const visiText = document.getElementById('profil-visi')?.innerHTML || '';
+    const misiText = document.getElementById('profil-misi')?.innerHTML || '';
+    const strukturText = document.getElementById('profil-struktur')?.innerHTML || '';
+
+    // 2. Bungkus data menjadi satu objek untuk dikirim
+    const updatedProfil = {
+        id: 1, // Kita kunci di ID 1 agar data profil selalu menimpa/mengupdate data yang sama
+        created_at: new Date(),
+        visi: visiText,
+        misi: misiText,
+        struktur: strukturText
+    };
+
+    // 3. Jalankan perintah simpan (upsert) ke Cloud Supabase
+    // Upsert artinya: Jika ID 1 belum ada, dia membuat baru. Jika sudah ada, dia otomatis mengupdate.
+    const { error } = await _supabase
+        .from('profil')
+        .upsert([updatedProfil], { onConflict: 'id' });
+
+    if (error) {
+        alert("Gagal menyimpan ke Cloud Supabase: " + error.message);
+        console.error(error);
+        return;
+    }
+
+    // 4. Proses merapikan kembali tampilan tombol (Kode asli Anda)
+    ['visi', 'misi', 'struktur'].forEach(field => {
+        const node = document.getElementById(`profil-${field}`);
+        if (node) {
+            node.contentEditable = "false";
+            node.classList.remove('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
+            localStorage.setItem(`cloud_profil_${field}`, node.innerHTML);
         }
+    });
+
+    disableProfileEdit(); // Menutup mode edit
+    alert("Profil berhasil diperbarui di Cloud Server secara Global!");
+}
 
         function disableProfilEdit() {
             document.getElementById('btn-save-profil').classList.add('hidden');
