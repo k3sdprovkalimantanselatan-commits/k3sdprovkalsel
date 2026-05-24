@@ -461,36 +461,24 @@
         }
 
      async function fetchProfileData() {
-    try {
-        const { data, error } = await _supabase
-            .from('profil')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(1);
+    const { data, error } = await _supabase
+        .from('profil')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(1);
 
-        if (error) {
-            console.error("Gagal memuat profil dari Cloud:", error);
-            return;
-        }
-
-        if (data && data.length > 0) {
-            const profil = data[0];
-            
-            // Menggunakan .innerHTML agar format enter/pemberian jarak teks (bawaan teks editor) tetap rapi
-            if (document.getElementById('profil-visi')) {
-                document.getElementById('profil-visi').innerHTML = profil.visi || "Data visi belum diisi.";
-            }
-            if (document.getElementById('profil-misi')) {
-                document.getElementById('profil-misi').innerHTML = profil.misi || "Data misi belum diisi.";
-            }
-            if (document.getElementById('profil-struktur')) {
-                document.getElementById('profil-struktur').innerHTML = profil.struktur || "Data struktur belum diisi.";
-            }
-       } // akhir dari if (data && data.length > 0)
-    } catch (err) {
-        console.error("Sistem gagal memproses fetchProfileData:", err);
+    if (error) {
+        console.error("Gagal memuat profil dari Cloud:", error);
+        return;
     }
-} // <--- Batas akhir fungsi fetchProfileData
+
+    if (data && data.length > 0) {
+        const profil = data[0];
+        if (document.getElementById('profil-visi')) document.getElementById('profil-visi').innerHTML = profil.visi || "Data visi belum diisi.";
+        if (document.getElementById('profil-misi')) document.getElementById('profil-misi').innerHTML = profil.misi || "Data misi belum diisi.";
+        if (document.getElementById('profil-struktur')) document.getElementById('profil-struktur').innerHTML = profil.struktur || "Data struktur belum diisi.";
+    }
+}
 
        async function handleFormSubmit(e) {
     e.preventDefault();
@@ -554,27 +542,17 @@
             });
         }
 
-        async function saveProfilEdit() { // <--- Awal fungsi saveProfilEdit
-    try {
-        const visiText = document.getElementById('profil-visi')?.innerHTML || '';
+        async function saveProfilEdit() {
+    const visiText = document.getElementById('profil-visi')?.innerHTML || '';
     const misiText = document.getElementById('profil-misi')?.innerHTML || '';
     const strukturText = document.getElementById('profil-struktur')?.innerHTML || '';
 
-    const updatedProfil = {
-        id: 1, 
-        created_at: new Date(),
-        visi: visiText,
-        misi: misiText,
-        struktur: strukturText
-    };
-
     const { error } = await _supabase
         .from('profil')
-        .upsert([updatedProfil], { onConflict: 'id' });
+        .upsert([{ id: 1, created_at: new Date(), visi: visiText, misi: misiText, struktur: strukturText }], { onConflict: 'id' });
 
     if (error) {
         alert("Gagal menyimpan ke Cloud Supabase: " + error.message);
-        console.error(error);
         return;
     }
 
@@ -583,15 +561,11 @@
         if (node) {
             node.contentEditable = "false";
             node.classList.remove('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
-            localStorage.setItem(`cloud_profil_${field}`, node.innerHTML);
         }
     });
 
-    if (typeof disableProfileEdit === "function") {
-        disableProfileEdit();
-    } else if (typeof disableProfilEdit === "function") {
-        disableProfilEdit();
-    }
+    if (typeof disableProfileEdit === "function") disableProfileEdit();
+    else if (typeof disableProfilEdit === "function") disableProfilEdit();
     
     alert("Profil berhasil diperbarui di Cloud Server secara Global!");
 }
