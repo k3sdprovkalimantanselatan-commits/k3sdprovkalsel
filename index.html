@@ -343,7 +343,7 @@
         });
 
         async function createTablesIfNotExist() {
-            await fetchProfil();
+            await fetchProfilData();
         }
 
         function switchPage(pageId) {
@@ -486,11 +486,11 @@
             if (document.getElementById('profil-struktur')) {
                 document.getElementById('profil-struktur').innerHTML = profil.struktur || "Data struktur belum diisi.";
             }
-        }
+       } // akhir dari if (data && data.length > 0)
     } catch (err) {
         console.error("Sistem gagal memproses fetchProfileData:", err);
     }
-}
+} // <--- Batas akhir fungsi fetchProfileData
 
        async function handleFormSubmit(e) {
     e.preventDefault();
@@ -554,8 +554,9 @@
             });
         }
 
-        async function saveProfilEdit() {
-    const visiText = document.getElementById('profil-visi')?.innerHTML || '';
+        async function saveProfilEdit() { // <--- Awal fungsi saveProfilEdit
+    try {
+        const visiText = document.getElementById('profil-visi')?.innerHTML || '';
     const misiText = document.getElementById('profil-misi')?.innerHTML || '';
     const strukturText = document.getElementById('profil-struktur')?.innerHTML || '';
 
