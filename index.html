@@ -460,44 +460,37 @@
             });
         }
 
-       async function fetchProfileData() {
-    const { data, error } = await _supabase
-        .from('profil')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(1);
+     async function fetchProfileData() {
+    try {
+        const { data, error } = await _supabase
+            .from('profil')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(1);
 
-    if (error) {
-        console.error("Gagal memuat profil dari Cloud:", error);
-        return;
-    }
+        if (error) {
+            console.error("Gagal memuat profil dari Cloud:", error);
+            return;
+        }
 
-    if (data && data.length > 0) {
-        const profil = data[0];
-        
-        if (document.getElementById('profil-visi')) {
-            document.getElementById('profil-visi').innerHTML = profil.visi || "Data visi belum diisi.";
+        if (data && data.length > 0) {
+            const profil = data[0];
+            
+            // Menggunakan .innerHTML agar format enter/pemberian jarak teks (bawaan teks editor) tetap rapi
+            if (document.getElementById('profil-visi')) {
+                document.getElementById('profil-visi').innerHTML = profil.visi || "Data visi belum diisi.";
+            }
+            if (document.getElementById('profil-misi')) {
+                document.getElementById('profil-misi').innerHTML = profil.misi || "Data misi belum diisi.";
+            }
+            if (document.getElementById('profil-struktur')) {
+                document.getElementById('profil-struktur').innerHTML = profil.struktur || "Data struktur belum diisi.";
+            }
         }
-        if (document.getElementById('profil-misi')) {
-            document.getElementById('profil-misi').innerHTML = profil.misi || "Data misi belum diisi.";
-        }
-        if (document.getElementById('profil-struktur')) {
-            document.getElementById('profil-struktur').innerHTML = profil.struktur || "Data struktur belum diisi.";
-        }
+    } catch (err) {
+        console.error("Sistem gagal memproses fetchProfileData:", err);
     }
 }
-
-    if (data && data.length > 0) {
-        const profil = data[0];
-        
-        // Memasukkan data dari kolom 'visi' dan 'misi' Supabase ke ID HTML yang sesuai
-        if (document.getElementById('profil-visi')) {
-            document.getElementById('profil-visi').innerText = profil.visi || "Data visi belum diisi.";
-        }
-        if (document.getElementById('profil-misi')) {
-            document.getElementById('profil-misi').innerText = profil.misi || "Data misi belum diisi.";
-        }
-    }
 
        async function handleFormSubmit(e) {
     e.preventDefault();
