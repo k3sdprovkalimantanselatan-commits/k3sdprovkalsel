@@ -342,8 +342,9 @@
             // ====================================================
         });
 
-        async function createTablesIfNotExist() {
-            await fetchProfilData();
+       async function createTablesIfNotExist() {
+            // Memanggil fungsi profil yang benar saat halaman dimuat
+            await fetchProfileData();
         }
 
         function switchPage(pageId) {
@@ -395,24 +396,26 @@
             fetchDynamicData('beranda', 'container-beranda');
             fetchDynamicData('kegiatan', 'container-kegiatan');
             fetchDynamicData('dokumentasi', 'container-dokumentasi');
+            // Memanggil fungsi jembatan profil agar sinkron dengan panggilan lama
             fetchProfil();
         }
 
         async function fetchDynamicData(table, containerId) {
             const container = document.getElementById(containerId);
             let { data, error } = await _supabase.from(table).select('*').order('created_at', { ascending: false });
-            
             if (error) {
                 console.log(`Menyiapkan backup cloud virtual...`);
                 let cloudBackup = localStorage.getItem(`cloud_virtual_${table}`);
                 if(!cloudBackup) {
-                    cloudBackup = table === 'beranda' ? '[{"id":1,"kategori":"Info","judul":"Selamat! Website Sudah Terhubung Cloud","deskripsi":"Silakan masuk ke mode admin untuk menambahkan pengumuman baru secara global.","tanggal":"Hari Ini"}]' : '[]';
+                    cloudBackup = table === 'beranda' ?
+                    '[{"id":1,"kategori":"Info","judul":"Selamat! Website Sudah Terhubung Cloud","deskripsi":"Silakan masuk ke mode admin untuk menambahkan pengumuman baru secara global.","tanggal":"Hari Ini"}]' : '[]';
                     localStorage.setItem(`cloud_virtual_${table}`, cloudBackup);
                 }
                 data = JSON.parse(cloudBackup);
             }
 
-            container.innerHTML = data.length === 0 ? '<p class="text-gray-400 text-sm">Belum ada konten.</p>' : '';
+            container.innerHTML = data.length === 0 ?
+            '<p class="text-gray-400 text-sm">Belum ada konten.</p>' : '';
             
             data.forEach(item => {
                 if (table === 'dokumentasi') {
@@ -433,8 +436,6 @@
                         if (status === 'Sudah Selesai') colorClass = 'bg-emerald-100 text-emerald-800';
                         
                         statusBadge = `<span class="${colorClass} text-[11px] font-bold px-2.5 py-1 rounded-md inline-block ml-2">${status}</span>`;
-                        
-                        // Menampilkan info jam jika tersedia di database
                         if (item.jam) {
                             timeInfo = `<span class="ml-3 pl-3 border-l border-gray-200"><i class="fa-regular fa-clock mr-1 text-emerald-600"></i>${item.jam}</span>`;
                         }
@@ -460,25 +461,71 @@
             });
         }
 
-     async function fetchProfileData() {
-    const { data, error } = await _supabase
-        .from('profil')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(1);
+        // ==================== FUNGSI UTAMA MEMUAT DATA PROFIL ====================
+        async function fetchProfileData() {
+            const { data, error } = await _supabase
+                .from('profil')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .limit(1);
 
-    if (error) {
-        console.error("Gagal memuat profil dari Cloud:", error);
-        return;
-    }
+            if (error) {
+                console.error("Gagal memuat profil dari Cloud:", error);
+                return;
+            }
 
-    if (data && data.length > 0) {
-        const profil = data[0];
-        if (document.getElementById('profil-visi')) document.getElementById('profil-visi').innerHTML = profil.visi || "Data visi belum diisi.";
-        if (document.getElementById('profil-misi')) document.getElementById('profil-misi').innerHTML = profil.misi || "Data misi belum diisi.";
-        if (document.getElementById('profil-struktur')) document.getElementById('profil-struktur').innerHTML = profil.struktur || "Data struktur belum diisi.";
-    }
-}
+            if (data && data.length > 0) {
+                const profil = data[0];
+                if (document.getElementById('profil-visi')) document.getElementById('profil-visi').innerHTML = profil.visi || "Data visi belum diisi.";
+                if (document.getElementById('profil-misi')) document.getElementById('profil-misi').innerHTML = profil.misi || "Data misi belum diisi.";
+                if (document.getElementById('profil-struktur')) document.getElementById('profil-struktur').innerHTML = profil.struktur || "Data struktur belum diisi.";
+            }
+        }
+
+        // ==================== FUNGSI JEMBATAN PANGGILAN PROFIL ====================
+        async function fetchProfil() {
+            await fetchProfileData();
+        }
+
+        // ==================== FUNGSI MENYIMPAN DATA PROFIL ====================
+        async function saveProfilEdit() {
+            const visiText = document.getElementById('profil-visi')?.innerHTML || '';
+            const misiText = document.getElementById('profil-misi')?.innerHTML || '';
+            const strukturText = document.getElementById('profil-struktur')?.innerHTML || '';
+
+            const updatedProfil = {
+                id: 1, 
+                created_at: new Date(),
+                visi: visiText,
+                misi: misiText,
+                struktur: strukturText
+            };
+
+            const { error } = await _supabase
+                .from('profil')
+                .upsert([updatedProfil], { onConflict: 'id' });
+
+            if (error) {
+                alert("Gagal menyimpan ke Cloud Supabase: " + error.message);
+                return;
+            }
+
+            ['visi', 'misi', 'struktur'].forEach(field => {
+                const node = document.getElementById(`profil-${field}`);
+                if (node) {
+                    node.contentEditable = "false";
+                    node.classList.remove('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
+                }
+            });
+
+            disableProfilEdit();
+            alert("Profil berhasil diperbarui di Cloud Server secara Global!");
+        }
+
+        function disableProfilEdit() {
+            document.getElementById('btn-save-profil').classList.add('hidden');
+            if(isAdminActive) document.getElementById('btn-edit-profil').classList.remove('hidden');
+        }
 
        async function handleFormSubmit(e) {
     e.preventDefault();
