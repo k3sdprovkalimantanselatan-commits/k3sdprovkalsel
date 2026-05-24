@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>K3SD PROVINSI KALIMANTAN SELATAN</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome untuk Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -25,7 +21,6 @@
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen text-gray-800">
 
-    <!-- NAVBAR -->
     <nav class="bg-white shadow-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
@@ -81,10 +76,8 @@
         </div>
     </nav>
 
-    <!-- CONTENT CONTAINERS -->
     <main class="flex-grow">
         
-        <!-- PAGE: BERANDA -->
         <div id="page-beranda" class="page-section">
             <div class="bg-utama text-white py-12 md:py-20 overflow-hidden relative">
                 <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-emerald-800/40 via-transparent to-transparent"></div>
@@ -119,54 +112,26 @@
                     </button>
                 </div>
                 
-                <!-- STRUKTUR BARU BERANDA: 2 KOLOM (KONTEN UTAMA & SIDEBAR INFO) -->
                 <div class="grid lg:grid-cols-12 gap-8 items-start">
-                    <!-- Kiri: Container Berita Utama (75% Lebar di layar Desktop) -->
                     <div id="container-beranda" class="lg:col-span-8 grid sm:grid-cols-2 gap-6">
                         <p class="text-gray-400 text-sm animate-pulse">Memuat data dari cloud server...</p>
                     </div>
 
-                    <!-- Kanan: List Info Ringkas Tambahan (25% Lebar di layar Desktop) -->
                     <div class="lg:col-span-4 space-y-6">
                         <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm sticky top-24">
                             <h3 class="text-lg font-bold text-utama mb-4 flex items-center space-x-2">
                                 <i class="fa-solid fa-bullhorn text-aksen text-sm"></i>
                                 <span>Info Kilat & Tautan Resmi</span>
                             </h3>
-                            <ul class="divide-y divide-gray-100 text-sm">
-                                <li class="py-3">
-                                    <a href="#" class="text-gray-600 hover:text-emerald-700 transition font-medium block">
-                                        <i class="fa-solid fa-chevron-right text-[10px] text-aksen mr-1.5"></i>
-                                        Jadwal Koordinasi Wilayah K3SD Kalsel 2026
-                                    </a>
-                                </li>
-                                <li class="py-3">
-                                    <a href="#" class="text-gray-600 hover:text-emerald-700 transition font-medium block">
-                                        <i class="fa-solid fa-chevron-right text-[10px] text-aksen mr-1.5"></i>
-                                        Sistem Akreditasi Sekolah Dasar Terpadu
-                                    </a>
-                                </li>
-                                <li class="py-3">
-                                    <a href="#" class="text-gray-600 hover:text-emerald-700 transition font-medium block">
-                                        <i class="fa-solid fa-chevron-right text-[10px] text-aksen mr-1.5"></i>
-                                        Link Pendaftaran Diklat Fungsional Kepsek
-                                    </a>
-                                </li>
-                                <li class="py-3">
-                                    <a href="#" class="text-gray-600 hover:text-emerald-700 transition font-medium block">
-                                        <i class="fa-solid fa-chevron-right text-[10px] text-aksen mr-1.5"></i>
-                                        Unduhan Buku Saku Kurikulum Merdeka
-                                    </a>
-                                </li>
+                            <ul id="list-info-kilat" class="divide-y divide-gray-100 text-sm">
+                                <p class="text-gray-400 text-xs animate-pulse py-2">Memuat info...</p>
                             </ul>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
-        <!-- PAGE: PROFIL -->
         <div id="page-profil" class="page-section hidden py-16">
             <div class="max-w-4xl mx-auto px-4 sm:px-6">
                 <div class="text-center mb-12">
@@ -208,7 +173,6 @@
             </div>
         </div>
 
-        <!-- PAGE: KEGIATAN -->
         <div id="page-kegiatan" class="page-section hidden py-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
@@ -226,7 +190,6 @@
             </div>
         </div>
 
-        <!-- PAGE: DOKUMENTASI -->
         <div id="page-dokumentasi" class="page-section hidden py-16">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
@@ -245,7 +208,6 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
     <footer class="bg-utama text-gray-100 py-6 border-t border-emerald-900 text-xs">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2">
             <p class="text-emerald-100/50 order-2 sm:order-1">&copy; 2026 K3SD Provinsi Kalimantan Selatan. Database Cloud Aktif.</p>
@@ -253,7 +215,6 @@
         </div>
     </footer>
 
-    <!-- MODAL 1: LOGIN ADMIN -->
     <div id="modal-login" class="fixed inset-0 z-50 overflow-y-auto hidden">
         <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block relative">
             <div class="fixed inset-0 transition-opacity" onclick="toggleModal('modal-login', false)">
@@ -285,7 +246,6 @@
         </div>
     </div>
 
-    <!-- MODAL 2: FORM CRUD -->
     <div id="modal-crud" class="fixed inset-0 z-50 overflow-y-auto hidden">
         <div class="flex items-center justify-center min-h-screen px-4 text-center sm:block relative">
             <div class="fixed inset-0 transition-opacity" onclick="toggleModal('modal-crud', false)">
@@ -307,7 +267,6 @@
                             <input type="text" id="input-kategori" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white">
                         </div>
                         
-                        <!-- KOMLOM INPUT DROPDOWN STATUS -->
                         <div id="field-status">
                             <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Status Kegiatan</label>
                             <select id="input-status" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white">
@@ -326,7 +285,6 @@
                                 <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Tanggal Pelaksanaan</label>
                                 <input type="text" id="input-tanggal" required class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white" placeholder="Contoh: 25 Mei 2026">
                             </div>
-                            <!-- ISIAN JAM KEGIATAN BARU -->
                             <div id="field-jam">
                                 <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Jam Pelaksanaan</label>
                                 <input type="text" id="input-jam" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white" placeholder="Contoh: 08:00 - Selesai">
@@ -351,7 +309,6 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
         // ================= CONFIG CLOUD DATABASE BERHASIL TERPASANG =================
         const SUPABASE_URL = "https://otpkhjsaplklhsvblapz.supabase.co"; 
@@ -457,6 +414,25 @@
             container.innerHTML = data.length === 0 ?
             '<p class="text-gray-400 text-sm">Belum ada konten.</p>' : '';
             
+            // --- SINKRONISASI DINAMIS KE SIDEBAR KANAN BERANDA ---
+            if (table === 'beranda') {
+                const listKilatContainer = document.getElementById('list-info-kilat');
+                if (listKilatContainer) {
+                    listKilatContainer.innerHTML = data.length === 0 ? 
+                    '<p class="text-gray-400 text-xs py-2">Tidak ada info terbaru.</p>' : '';
+                    
+                    data.forEach(item => {
+                        listKilatContainer.innerHTML += `
+                            <li class="py-3">
+                                <a href="#container-beranda" class="text-gray-600 hover:text-emerald-700 transition font-medium block leading-relaxed">
+                                    <i class="fa-solid fa-chevron-right text-[10px] text-aksen mr-1.5"></i>
+                                    ${item.judul}
+                                </a>
+                            </li>`;
+                    });
+                }
+            }
+
             data.forEach(item => {
                 if (table === 'dokumentasi') {
                     container.innerHTML += `
@@ -581,8 +557,10 @@
             document.getElementById('btn-save-profil').classList.remove('hidden');
             ['visi', 'misi', 'struktur'].forEach(field => {
                 const node = document.getElementById(`profil-${field}`);
-                node.contentEditable = "true";
-                node.classList.add('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
+                if (node) {
+                    node.contentEditable = "true";
+                    node.classList.add('bg-amber-50', 'ring-2', 'ring-amber-200', 'p-2');
+                }
             });
         }
 
