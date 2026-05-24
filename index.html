@@ -49,7 +49,7 @@
                     
                     <!-- Admin Button -->
                     <div class="pl-4 border-l border-gray-200 ml-2">
-                        <button id="btn-login-trigger" onclick="toggleModal('modal-login', true)" class="bg-utama hover:bg-emerald-900 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow transition-all duration-200 flex items-center space-x-2">
+                        <button id="btn-login-trigger" onclick="toggleModal('modal-login', true)" class="bg-utama hover:bg-emerald-900 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow transition-all duration-200 flex items-center space-x-2 cursor-pointer">
                             <i class="fa-solid fa-right-to-bracket text-xs"></i>
                             <span>Login Admin</span>
                         </button>
@@ -57,7 +57,7 @@
                             <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-md border border-amber-200 flex items-center space-x-1">
                                 <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse mr-1"></span>Mode Admin
                             </span>
-                            <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs px-3 py-1.5 rounded-md border border-red-200 transition-all duration-150">
+                            <button onclick="logoutAdmin()" class="bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs px-3 py-1.5 rounded-md border border-red-200 transition-all duration-150 cursor-pointer">
                                 Logout
                             </button>
                         </div>
@@ -80,12 +80,12 @@
             <button onclick="switchPage('kegiatan')" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600 hover:bg-gray-50">Kegiatan</button>
             <button onclick="switchPage('dokumentasi')" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-gray-600 hover:bg-gray-50">Dokumentasi</button>
             <div class="pt-4 border-t border-gray-100 mt-2">
-                <button id="btn-login-trigger-mobile" onclick="toggleModal('modal-login', true)" class="w-full bg-utama text-white font-medium py-3 rounded-lg text-center block shadow">Login Admin</button>
+                <button id="btn-login-trigger-mobile" onclick="toggleModal('modal-login', true)" class="w-full bg-utama text-white font-medium py-3 rounded-lg text-center block shadow cursor-pointer">Login Admin</button>
                 <div id="admin-badge-mobile" class="hidden space-y-2">
                     <div class="bg-amber-50 text-amber-800 text-sm font-bold p-3 rounded-lg border border-amber-200 text-center">
                         Mode Admin Aktif
                     </div>
-                    <button onclick="logoutAdmin()" class="w-full bg-red-600 text-white font-medium py-3 rounded-lg text-center block shadow">Logout</button>
+                    <button onclick="logoutAdmin()" class="w-full bg-red-600 text-white font-medium py-3 rounded-lg text-center block shadow cursor-pointer">Logout</button>
                 </div>
             </div>
         </div>
@@ -110,8 +110,8 @@
                                 Berkomitmen meningkatkan mutu manajemen sekolah, kapabilitas kepemimpinan era digital, serta akselerasi mutu pendidikan dasar yang merata di Bumi Lambung Mangkurat.
                             </p>
                             <div class="flex flex-wrap gap-4 pt-2">
-                                <button onclick="switchPage('profil')" class="bg-aksen hover:bg-amber-500 text-utama font-bold px-6 py-3.5 rounded-xl shadow-lg transition-all duration-200 transform hover:-translate-y-0.5">Jelajahi Profil</button>
-                                <button onclick="switchPage('kegiatan')" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3.5 rounded-xl backdrop-blur-sm border border-white/20 transition-all duration-200">Agenda Kegiatan</button>
+                                <button onclick="switchPage('profil')" class="bg-aksen hover:bg-amber-500 text-utama font-bold px-6 py-3.5 rounded-xl shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer">Jelajahi Profil</button>
+                                <button onclick="switchPage('kegiatan')" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-6 py-3.5 rounded-xl backdrop-blur-sm border border-white/20 transition-all duration-200 cursor-pointer">Agenda Kegiatan</button>
                             </div>
                         </div>
                         <div class="md:col-span-5 relative">
@@ -139,7 +139,7 @@
                         <h2 class="text-2xl sm:text-3xl font-bold text-utama tracking-tight">Informasi & Pengumuman Terbaru</h2>
                         <div class="h-1 w-20 bg-aksen mt-2 rounded-full"></div>
                     </div>
-                    <button onclick="openFormModal('beranda')" class="admin-action hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow items-center space-x-2 transition-all">
+                    <button onclick="openFormModal('beranda')" class="admin-action hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow items-center space-x-2 transition-all cursor-pointer">
                         <i class="fa-solid fa-circle-plus"></i> <span>Tambah Pengumuman</span>
                     </button>
                 </div>
@@ -162,10 +162,10 @@
 
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-8 relative">
                     <div class="absolute top-6 right-6">
-                        <button onclick="enableProfilEdit()" id="btn-edit-profil" class="admin-action hidden bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow items-center space-x-2 transition-all">
+                        <button onclick="enableProfilEdit()" id="btn-edit-profil" class="admin-action hidden bg-amber-500 hover:bg-amber-600 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow items-center space-x-2 transition-all cursor-pointer">
                             <i class="fa-solid fa-pen-to-square"></i> <span>Edit Profil</span>
                         </button>
-                        <button onclick="saveProfilEdit()" id="btn-save-profil" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow items-center space-x-2 transition-all">
+                        <button onclick="saveProfilEdit()" id="btn-save-profil" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2 rounded-lg shadow items-center space-x-2 transition-all cursor-pointer">
                             <i class="fa-solid fa-floppy-disk"></i> <span>Simpan Perubahan</span>
                         </button>
                     </div>
@@ -222,7 +222,7 @@
                         <h2 class="text-3xl font-bold text-utama tracking-tight">Agenda & Kegiatan Terkini</h2>
                         <div class="h-1 w-20 bg-aksen mt-2 rounded-full"></div>
                     </div>
-                    <button onclick="openFormModal('kegiatan')" class="admin-action hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow items-center space-x-2 transition-all">
+                    <button onclick="openFormModal('kegiatan')" class="admin-action hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow items-center space-x-2 transition-all cursor-pointer">
                         <i class="fa-solid fa-circle-plus"></i> <span>Tambah Agenda Kegiatan</span>
                     </button>
                 </div>
@@ -242,7 +242,7 @@
                         <h2 class="text-3xl font-bold text-utama tracking-tight">Galeri Dokumentasi</h2>
                         <div class="h-1 w-20 bg-aksen mt-2 rounded-full"></div>
                     </div>
-                    <button onclick="openFormModal('dokumentasi')" class="admin-action hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow items-center space-x-2 transition-all">
+                    <button onclick="openFormModal('dokumentasi')" class="admin-action hidden bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm px-4 py-2.5 rounded-lg shadow items-center space-x-2 transition-all cursor-pointer">
                         <i class="fa-solid fa-camera"></i> <span>Unggah Dokumentasi Baru</span>
                     </button>
                 </div>
@@ -276,10 +276,10 @@
             <div class="md:col-span-3 space-y-4">
                 <h4 class="text-white font-bold text-sm tracking-wider uppercase">Navigasi Halaman</h4>
                 <ul class="space-y-2.5 text-sm text-emerald-100/70">
-                    <li><button onclick="switchPage('beranda')" class="hover:text-aksen transition-colors">Beranda</button></li>
-                    <li><button onclick="switchPage('profil')" class="hover:text-aksen transition-colors">Profil</button></li>
-                    <li><button onclick="switchPage('kegiatan')" class="hover:text-aksen transition-colors">Kegiatan</button></li>
-                    <li><button onclick="switchPage('dokumentasi')" class="hover:text-aksen transition-colors">Dokumentasi</button></li>
+                    <li><button onclick="switchPage('beranda')" class="hover:text-aksen transition-colors cursor-pointer">Beranda</button></li>
+                    <li><button onclick="switchPage('profil')" class="hover:text-aksen transition-colors cursor-pointer">Profil</button></li>
+                    <li><button onclick="switchPage('kegiatan')" class="hover:text-aksen transition-colors cursor-pointer">Kegiatan</button></li>
+                    <li><button onclick="switchPage('dokumentasi')" class="hover:text-aksen transition-colors cursor-pointer">Dokumentasi</button></li>
                 </ul>
             </div>
 
@@ -304,37 +304,39 @@
         </div>
     </footer>
 
-    <!-- ================= MODAL DIALOGS ================= -->
+    <!-- ================= MODAL DIALOGS (SUDAH DIPERBAIKI DARI BLUR) ================= -->
 
     <!-- MODAL 1: LOGIN ADMIN -->
     <div id="modal-login" class="fixed inset-0 z-50 overflow-y-auto hidden">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0 relative">
+            <!-- Latar belakang gelap transparan & efek blur diisolasi khusus di sini -->
             <div class="fixed inset-0 transition-opacity" onclick="toggleModal('modal-login', false)">
-                <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm"></div>
+                <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-gray-100">
+            <!-- Kotak Putih Utama (Diberi relative z-10 agar jernih sempurna) -->
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-gray-100 relative z-10">
                 <div class="bg-white px-6 pt-6 pb-4">
                     <div class="flex justify-between items-center pb-4 border-b border-gray-100">
                         <h3 class="text-xl font-bold text-utama flex items-center space-x-2">
                             <i class="fa-solid fa-lock text-base text-aksen"></i>
-                            <span>Autentikasi Admin</span>
+                            <span class="text-gray-900">Autentikasi Admin</span>
                         </h3>
-                        <button onclick="toggleModal('modal-login', false)" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        <button onclick="toggleModal('modal-login', false)" class="text-gray-400 hover:text-gray-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
                     </div>
                     <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4 pt-4">
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Username</label>
-                            <input type="text" id="login-username" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-utama text-sm" placeholder="admin">
+                            <input type="text" id="login-username" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="admin">
                         </div>
                         <div>
                             <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Password</label>
-                            <input type="password" id="login-password" required class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-utama text-sm" placeholder="••••••••">
+                            <input type="password" id="login-password" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="••••••••">
                         </div>
                         <div id="login-error" class="text-red-600 text-xs font-medium hidden flex items-center space-x-1">
                             <i class="fa-solid fa-circle-exclamation"></i> <span>Username atau Password salah!</span>
                         </div>
-                        <button type="submit" class="w-full bg-utama hover:bg-emerald-900 text-white font-bold py-3 rounded-lg shadow transition-all duration-150 mt-2 text-sm">Masuk Sistem</button>
+                        <button type="submit" class="w-full bg-utama hover:bg-emerald-900 text-white font-bold py-3 rounded-lg shadow transition-all duration-150 mt-2 text-sm cursor-pointer">Masuk Sistem</button>
                     </form>
                 </div>
             </div>
@@ -343,16 +345,18 @@
 
     <!-- MODAL 2: FORM CRUD (BERANDA & KEGIATAN & DOKUMENTASI) -->
     <div id="modal-crud" class="fixed inset-0 z-50 overflow-y-auto hidden">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0 relative">
+            <!-- Latar belakang gelap transparan & efek blur diisolasi khusus di sini -->
             <div class="fixed inset-0 transition-opacity" onclick="toggleModal('modal-crud', false)">
-                <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm"></div>
+                <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-md"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-gray-100">
+            <!-- Kotak Form Utama (Diberi relative z-10 agar jernih sempurna) -->
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-gray-100 relative z-10">
                 <div class="bg-white px-6 pt-6 pb-4">
                     <div class="flex justify-between items-center pb-4 border-b border-gray-100">
-                        <h3 id="crud-title" class="text-xl font-bold text-utama">Tambah Konten</h3>
-                        <button onclick="toggleModal('modal-crud', false)" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        <h3 id="crud-title" class="text-xl font-bold text-gray-900">Tambah Konten</h3>
+                        <button onclick="toggleModal('modal-crud', false)" class="text-gray-400 hover:text-gray-600 cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
                     </div>
                     <form id="form-crud" onsubmit="handleFormSubmit(event)" class="space-y-4 pt-4">
                         <!-- Id Entitas Tersembunyi -->
@@ -362,28 +366,28 @@
                         <!-- Field Dinamis Tergantung Kebutuhan -->
                         <div id="field-kategori">
                             <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Kategori / Badge</label>
-                            <input type="text" id="input-kategori" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-utama text-sm" placeholder="Contoh: Rakerwil, Registrasi, Info">
+                            <input type="text" id="input-kategori" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="Contoh: Rakerwil, Registrasi, Info">
                         </div>
                         <div id="field-judul">
                             <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Judul Konten</label>
-                            <input type="text" id="input-judul" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-utama text-sm" placeholder="Masukkan judul utama">
+                            <input type="text" id="input-judul" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="Masukkan judul utama">
                         </div>
                         <div id="field-tanggal">
                             <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Tanggal Pelaksanaan / Rilis</label>
-                            <input type="text" id="input-tanggal" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-utama text-sm" placeholder="Contoh: 20 Mei 2026">
+                            <input type="text" id="input-tanggal" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="Contoh: 20 Mei 2026">
                         </div>
                         <div id="field-gambar">
                             <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">URL Gambar / Foto</label>
-                            <input type="url" id="input-gambar" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-utama text-sm" placeholder="https://images.unsplash.com/...">
+                            <input type="url" id="input-gambar" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="https://images.unsplash.com/...">
                         </div>
                         <div id="field-deskripsi">
                             <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5">Deskripsi / Konten Ringkas</label>
-                            <textarea id="input-deskripsi" rows="4" class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:border-utama text-sm" placeholder="Tuliskan detail konten secara informatif..."></textarea>
+                            <textarea id="input-deskripsi" rows="4" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:border-utama text-sm text-gray-900 bg-white" placeholder="Tuliskan detail konten secara informatif..."></textarea>
                         </div>
 
                         <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
-                            <button type="button" onclick="toggleModal('modal-crud', false)" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-semibold px-4 py-2.5 rounded-lg text-sm transition-all">Batal</button>
-                            <button type="submit" class="bg-utama hover:bg-emerald-900 text-white font-bold px-5 py-2.5 rounded-lg text-sm shadow transition-all">Simpan Konten</button>
+                            <button type="button" onclick="toggleModal('modal-crud', false)" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-semibold px-4 py-2.5 rounded-lg text-sm transition-all cursor-pointer">Batal</button>
+                            <button type="submit" class="bg-utama hover:bg-emerald-900 text-white font-bold px-5 py-2.5 rounded-lg text-sm shadow transition-all cursor-pointer">Simpan Konten</button>
                         </div>
                     </form>
                 </div>
@@ -499,14 +503,13 @@
         function logoutAdmin() {
             setAdminMode(false);
             localStorage.removeItem('k3sd_admin_auth');
-            // Jika sedang mengedit profil, reset view saat logout
             disableProfilEdit();
         }
 
+        // 4. SET ADMIN MODE VISIBILITY
         function setAdminMode(active) {
             isAdminActive = active;
             
-            // Atur visibility tombol login & badge status admin
             const loginBtn = document.getElementById('btn-login-trigger');
             const loginBtnMobile = document.getElementById('btn-login-trigger-mobile');
             const badge = document.getElementById('admin-badge');
@@ -527,11 +530,10 @@
                 adminActions.forEach(element => element.style.setProperty('display', 'none', 'important'));
             }
 
-            // Render ulang kartu agar tombol edit/hapus pada card muncul/hilang
             renderAllData();
         }
 
-        // 4. RENDERING DATA DINAMIS DARI LOCALSTORAGE
+        // 5. RENDERING DATA DINAMIS DARI LOCALSTORAGE
         function renderAllData() {
             renderBeranda();
             renderKegiatan();
@@ -557,16 +559,15 @@
                                     <i class="fa-regular fa-calendar-check"></i>
                                     <span>${item.tanggal}</span>
                                 </div>
-                                <button class="text-utama font-bold text-sm flex items-center space-x-1 hover:text-emerald-700 transition-colors">
+                                <button class="text-utama font-bold text-sm flex items-center space-x-1 hover:text-emerald-700 transition-colors cursor-pointer">
                                     <span>Detail</span> <i class="fa-solid fa-arrow-right-long text-xs transition-transform group-hover:translate-x-1"></i>
                                 </button>
                             </div>
                         </div>
-                        <!-- Admin overlay control -->
                         ${isAdminActive ? `
-                        <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-xl shadow-md border border-gray-100 flex space-x-1">
-                            <button onclick="openEditModal('beranda', ${item.id})" class="text-amber-600 hover:bg-amber-50 p-2 rounded-lg text-xs transition-colors"><i class="fa-solid fa-marker"></i></button>
-                            <button onclick="deleteData('beranda', ${item.id})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg text-xs transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                        <div class="absolute top-3 right-3 bg-white/95 p-1.5 rounded-xl shadow-md border border-gray-200 flex space-x-1 z-20">
+                            <button onclick="openEditModal('beranda', ${item.id})" class="text-amber-600 hover:bg-amber-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-marker"></i></button>
+                            <button onclick="deleteData('beranda', ${item.id})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                         ` : ''}
                     </div>
@@ -594,9 +595,9 @@
                             </div>
                         </div>
                         ${isAdminActive ? `
-                        <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-xl shadow-md border border-gray-100 flex space-x-1">
-                            <button onclick="openEditModal('kegiatan', ${item.id})" class="text-amber-600 hover:bg-amber-50 p-2 rounded-lg text-xs transition-colors"><i class="fa-solid fa-marker"></i></button>
-                            <button onclick="deleteData('kegiatan', ${item.id})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg text-xs transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                        <div class="absolute top-3 right-3 bg-white/95 p-1.5 rounded-xl shadow-md border border-gray-200 flex space-x-1 z-20">
+                            <button onclick="openEditModal('kegiatan', ${item.id})" class="text-amber-600 hover:bg-amber-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-marker"></i></button>
+                            <button onclick="deleteData('kegiatan', ${item.id})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                         ` : ''}
                     </div>
@@ -622,9 +623,9 @@
                             <h4 class="font-bold text-sm text-gray-800 line-clamp-2 leading-snug group-hover:text-utama transition-colors">${item.judul}</h4>
                         </div>
                         ${isAdminActive ? `
-                        <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm p-1.5 rounded-xl shadow-md border border-gray-100 flex space-x-1">
-                            <button onclick="openEditModal('dokumentasi', ${item.id})" class="text-amber-600 hover:bg-amber-50 p-2 rounded-lg text-xs transition-colors"><i class="fa-solid fa-marker"></i></button>
-                            <button onclick="deleteData('dokumentasi', ${item.id})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg text-xs transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                        <div class="absolute top-3 right-3 bg-white/95 p-1.5 rounded-xl shadow-md border border-gray-200 flex space-x-1 z-20">
+                            <button onclick="openEditModal('dokumentasi', ${item.id})" class="text-amber-600 hover:bg-amber-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-marker"></i></button>
+                            <button onclick="deleteData('dokumentasi', ${item.id})" class="text-red-600 hover:bg-red-50 p-2 rounded-lg text-xs transition-colors cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                         ` : ''}
                     </div>
@@ -632,7 +633,7 @@
             });
         }
 
-        // 5. MANAJEMEN HALAMAN PROFIL (INLINE EDIT)
+        // 6. MANAJEMEN HALAMAN PROFIL (INLINE EDIT)
         function enableProfilEdit() {
             document.getElementById('btn-edit-profil').classList.add('hidden');
             document.getElementById('btn-save-profil').classList.remove('hidden');
@@ -652,26 +653,24 @@
                 const node = document.getElementById(`profil-${field}`);
                 node.contentEditable = "false";
                 node.classList.remove('bg-amber-50', 'border', 'border-amber-300', 'p-3', 'ring-2', 'ring-amber-200');
-                // Simpan perubahan ke localStorage (opsional jika ingin mempertahankan state profil custom)
                 localStorage.setItem(`k3sd_profil_${field}`, node.innerHTML);
             });
             alert('Perubahan profil berhasil disimpan secara lokal!');
         }
 
-        // Ambil data profil tersimpan saat load halaman (jika ada)
+        // Ambil data profil tersimpan saat load halaman
         ['visi', 'misi', 'struktur'].forEach(field => {
             const savedProfil = localStorage.getItem(`k3sd_profil_${field}`);
             if (savedProfil) document.getElementById(`profil-${field}`).innerHTML = savedProfil;
         });
 
-        // 6. OPERASI CRUD VIA MODAL DATA
+        // 7. OPERASI CRUD VIA MODAL DATA
         function openFormModal(pageTarget) {
             document.getElementById('form-crud').reset();
             document.getElementById('crud-id').value = '';
             document.getElementById('crud-target-page').value = pageTarget;
             document.getElementById('crud-title').innerText = `Tambah Data ${pageTarget.toUpperCase()}`;
 
-            // Sesuaikan tampilan form berdasarkan halaman target
             toggleFormFields(pageTarget);
             toggleModal('modal-crud', true);
         }
@@ -712,7 +711,6 @@
             let dataList = JSON.parse(localStorage.getItem(`k3sd_${page}`)) || [];
 
             if (idVal) {
-                // Skenario Edit Data
                 const index = dataList.findIndex(x => x.id == idVal);
                 if (index !== -1) {
                     dataList[index].judul = document.getElementById('input-judul').value;
@@ -725,9 +723,8 @@
                     }
                 }
             } else {
-                // Skenario Tambah Data Baru
                 const newItem = {
-                    id: Date.now(), // Generate ID unik menggunakan timestamp
+                    id: Date.now(),
                     judul: document.getElementById('input-judul').value,
                     tanggal: document.getElementById('input-tanggal').value
                 };
@@ -737,7 +734,7 @@
                 } else {
                     newItem.gambar = document.getElementById('input-gambar').value || 'https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=600&q=80';
                 }
-                dataList.unshift(newItem); // Taruh di baris paling atas/awal
+                dataList.unshift(newItem);
             }
 
             localStorage.setItem(`k3sd_${page}`, JSON.stringify(dataList));
