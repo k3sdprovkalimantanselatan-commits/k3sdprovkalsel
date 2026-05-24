@@ -261,6 +261,17 @@
                             <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Kategori / Badge</label>
                             <input type="text" id="input-kategori" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white">
                         </div>
+                        
+                        <!-- KOMLOM INPUT DROPDOWN STATUS (BARU) -->
+                        <div id="field-status">
+                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Status Kegiatan</label>
+                            <select id="input-status" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white">
+                                <option value="Menunggu">⏳ Menunggu</option>
+                                <option value="Sedang Berjalan">⚡ Sedang Berjalan</option>
+                                <option value="Sudah Selesai">✅ Sudah Selesai</option>
+                            </select>
+                        </div>
+
                         <div id="field-judul">
                             <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Judul Konten</label>
                             <input type="text" id="input-judul" required class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white">
@@ -385,10 +396,24 @@
                             ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
                         </div>`;
                 } else {
+                    // KODE WARNA BADGE STATUS KREATIF (BARU)
+                    let statusBadge = '';
+                    if (table === 'kegiatan') {
+                        const status = item.status || 'Menunggu';
+                        let colorClass = 'bg-amber-100 text-amber-800'; // Menunggu
+                        if (status === 'Sedang Berjalan') colorClass = 'bg-blue-100 text-blue-800 animate-pulse';
+                        if (status === 'Sudah Selesai') colorClass = 'bg-emerald-100 text-emerald-800';
+                        
+                        statusBadge = `<span class="${colorClass} text-[11px] font-bold px-2.5 py-1 rounded-md inline-block ml-2">${status}</span>`;
+                    }
+
                     container.innerHTML += `
                         <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col justify-between relative">
                             <div>
-                                <span class="bg-emerald-50 text-utama text-xs font-bold px-2.5 py-1 rounded-md inline-block mb-3">${item.kategori || 'Agenda'}</span>
+                                <div class="flex flex-wrap items-center mb-3">
+                                    <span class="bg-emerald-50 text-utama text-xs font-bold px-2.5 py-1 rounded-md inline-block">${item.kategori || 'Agenda'}</span>
+                                    ${statusBadge}
+                                </div>
                                 <h3 class="font-bold text-gray-900 leading-snug mb-2">${item.judul}</h3>
                                 <p class="text-gray-500 text-xs font-light leading-relaxed">${item.deskripsi}</p>
                             </div>
@@ -421,7 +446,8 @@
                 tanggal: document.getElementById('input-tanggal').value,
                 kategori: document.getElementById('input-kategori').value,
                 deskripsi: document.getElementById('input-deskripsi').value,
-                gambar: document.getElementById('input-gambar').value
+                gambar: document.getElementById('input-gambar').value,
+                status: document.getElementById('input-status').value // Menambahkan data status (Baru)
             };
 
             let { error } = await _supabase.from(page).insert([newItem]);
@@ -475,9 +501,15 @@
             document.getElementById('form-crud').reset();
             document.getElementById('crud-target-page').value = pageTarget;
             document.getElementById('crud-title').innerText = `Tambah Konten ${pageTarget.toUpperCase()}`;
+            
+            // PENGATURAN TAMPILAN ELEMEN FORM
             document.getElementById('field-kategori').style.display = (pageTarget === 'dokumentasi') ? 'none' : 'block';
             document.getElementById('field-deskripsi').style.display = (pageTarget === 'dokumentasi') ? 'none' : 'block';
             document.getElementById('field-gambar').style.display = (pageTarget === 'dokumentasi') ? 'block' : 'none';
+            
+            // Tampilkan pilihan status hanya di halaman kegiatan (Baru)
+            document.getElementById('field-status').style.display = (pageTarget === 'kegiatan') ? 'block' : 'none';
+            
             toggleModal('modal-crud', true);
         }
     </script>
