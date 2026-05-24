@@ -279,9 +279,16 @@
                             <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Judul Konten</label>
                             <input type="text" id="input-judul" required class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white">
                         </div>
-                        <div id="field-tanggal">
-                            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Tanggal Pelaksanaan</label>
-                            <input type="text" id="input-tanggal" required class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white" placeholder="Contoh: 25 Mei 2026">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div id="field-tanggal">
+                                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Tanggal Pelaksanaan</label>
+                                <input type="text" id="input-tanggal" required class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white" placeholder="Contoh: 25 Mei 2026">
+                            </div>
+                            <!-- ISIAN JAM KEGIATAN BARU -->
+                            <div id="field-jam">
+                                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Jam Pelaksanaan</label>
+                                <input type="text" id="input-jam" class="w-full px-4 py-2 rounded-lg border border-gray-300 text-sm text-gray-900 bg-white" placeholder="Contoh: 08:00 - Selesai">
+                            </div>
                         </div>
                         <div id="field-gambar">
                             <label class="block text-xs font-bold uppercase text-gray-500 mb-1">URL Gambar / Foto</label>
@@ -417,6 +424,8 @@
                         </div>`;
                 } else {
                     let statusBadge = '';
+                    let timeInfo = '';
+                    
                     if (table === 'kegiatan') {
                         const status = item.status || 'Menunggu';
                         let colorClass = 'bg-amber-100 text-amber-800';
@@ -424,6 +433,11 @@
                         if (status === 'Sudah Selesai') colorClass = 'bg-emerald-100 text-emerald-800';
                         
                         statusBadge = `<span class="${colorClass} text-[11px] font-bold px-2.5 py-1 rounded-md inline-block ml-2">${status}</span>`;
+                        
+                        // Menampilkan info jam jika tersedia di database
+                        if (item.jam) {
+                            timeInfo = `<span class="ml-3 pl-3 border-l border-gray-200"><i class="fa-regular fa-clock mr-1 text-emerald-600"></i>${item.jam}</span>`;
+                        }
                     }
 
                     container.innerHTML += `
@@ -436,7 +450,10 @@
                                 <h3 class="font-bold text-gray-900 leading-snug mb-2">${item.judul}</h3>
                                 <p class="text-gray-500 text-xs font-light leading-relaxed">${item.deskripsi}</p>
                             </div>
-                            <div class="pt-4 mt-4 border-t border-gray-50 text-xs text-gray-400"><i class="fa-regular fa-calendar mr-1"></i>${item.tanggal}</div>
+                            <div class="pt-4 mt-4 border-t border-gray-50 text-xs text-gray-400 flex items-center">
+                                <span><i class="fa-regular fa-calendar mr-1 text-emerald-600"></i>${item.tanggal}</span>
+                                ${timeInfo}
+                            </div>
                             ${isAdminActive ? `<button onclick="deleteData('${table}', ${item.id})" class="absolute top-2 right-2 bg-white text-red-600 p-2 rounded-xl shadow border border-gray-100 text-xs cursor-pointer"><i class="fa-solid fa-trash-can"></i></button>` : ''}
                         </div>`;
                 }
@@ -463,6 +480,7 @@
                 created_at: new Date(),
                 judul: document.getElementById('input-judul').value,
                 tanggal: document.getElementById('input-tanggal').value,
+                jam: document.getElementById('input-jam').value, // Ambil nilai jam pelaksanaaan
                 kategori: document.getElementById('input-kategori').value,
                 deskripsi: document.getElementById('input-deskripsi').value,
                 gambar: document.getElementById('input-gambar').value,
@@ -525,6 +543,7 @@
             document.getElementById('field-deskripsi').style.display = (pageTarget === 'dokumentasi') ? 'none' : 'block';
             document.getElementById('field-gambar').style.display = (pageTarget === 'dokumentasi') ? 'block' : 'none';
             document.getElementById('field-status').style.display = (pageTarget === 'kegiatan') ? 'block' : 'none';
+            document.getElementById('field-jam').style.display = (pageTarget === 'kegiatan') ? 'block' : 'none'; // Hanya tampil di kegiatan
             
             toggleModal('modal-crud', true);
         }
