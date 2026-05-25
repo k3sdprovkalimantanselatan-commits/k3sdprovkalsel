@@ -209,8 +209,13 @@
     </main>
 
     <footer class="bg-utama text-gray-100 py-6 border-t border-emerald-900 text-xs">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2">
-            <p class="text-emerald-100/50 order-2 sm:order-1">&copy; 2026 K3SD Provinsi Kalimantan Selatan. Database Cloud Aktif.</p>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 order-2 sm:order-1 text-center sm:text-left">
+                <p class="text-emerald-100/50">&copy; 2026 K3SD Provinsi Kalimantan Selatan. Database Cloud Aktif.</p>
+                <a href="https://www.instagram.com/k3sdprovkalsel_official" target="_blank" rel="noopener noreferrer" class="text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1.5 transition-colors">
+                    <i class="fa-brands fa-instagram text-sm"></i> @k3sdprovkalsel_official
+                </a>
+            </div>
             <p class="text-amber-400 font-medium tracking-wide order-1 sm:order-2"><i class="fa-solid fa-code text-[10px] mr-1 opacity-70"></i>Author : Shalahuddin Al-Ayubi, M.Pd.</p>
         </div>
     </footer>
@@ -341,7 +346,7 @@
             // ====================================================
         });
 
-       async function createTablesIfNotExist() {
+        async function createTablesIfNotExist() {
             await fetchProfileData();
         }
 
@@ -418,7 +423,7 @@
             if (table === 'beranda') {
                 const listKilatContainer = document.getElementById('list-info-kilat');
                 if (listKilatContainer) {
-                    listKilatContainer.innerHTML = data.length === 0 ? 
+                    listKilatContainer.innerHTML = data.length === 0 ?
                     '<p class="text-gray-400 text-xs py-2">Tidak ada info terbaru.</p>' : '';
                     
                     data.forEach(item => {
@@ -506,7 +511,7 @@
             if(isAdminActive) document.getElementById('btn-edit-profil').classList.remove('hidden');
         }
 
-       async function handleFormSubmit(e) {
+        async function handleFormSubmit(e) {
             e.preventDefault();
             const page = document.getElementById('crud-target-page').value;
             
